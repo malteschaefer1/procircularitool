@@ -1,0 +1,121 @@
+{
+  "app": {
+    "title": "ProCirculariTool",
+    "tagline": "PCI-Analyse direkt im Browser",
+    "reset": "Sitzung zurücksetzen"
+  },
+  "nav": {
+    "theme": "Theme",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "highContrast": "Hoher Kontrast",
+    "language": "Sprache"
+  },
+  "steps": {
+    "upload": { "title": "Upload oder Beispiel", "desc": "BoM laden (Datei, Beispiel oder manuell)." },
+    "mapping": { "title": "Spalten zuordnen", "desc": "Quellspalten dem Kanon zuordnen." },
+    "parameters": { "title": "Parameter", "desc": "Standardwerte prüfen und anpassen." },
+    "results": { "title": "Ergebnisse", "desc": "PCI und Aufschlüsselungen." },
+    "whatif": { "title": "Was-wäre-wenn & Sensitivität", "desc": "Änderungen testen und Hebel sehen." }
+  },
+  "upload": {
+    "title": "Schritt 1 – BoM bereitstellen",
+    "subtitle": "CSV/XLSX hochladen, Beispiel laden oder manuell eingeben.",
+    "washingMachine": "Beispiel Waschmaschine",
+    "guardLock": "Beispiel Sicherheitsschalter",
+    "chooseFile": "CSV- oder XLSX-Datei",
+    "placeholder": "BoM-Datei auswählen...",
+    "uploadCta": "Upload & parsen",
+    "privacyNotice": "Dateien werden nur lokal im Browser geparst. Keine Daten verlassen den Tab.",
+    "manualEntry": "Manuelle Eingabe",
+    "manualEntryHint": "Zeilen direkt im Browser anlegen oder anpassen.",
+    "addRow": "Zeile hinzufügen",
+    "preview": "Vorschau (erste 5 Zeilen)",
+    "previewHint": "Spalten im nächsten Schritt zuordnen."
+  },
+  "mapping": {
+    "title": "Schritt 2 – Spalten zuordnen",
+    "subtitle": "Quell-Header den Zielfeldern zuweisen.",
+    "apply": "Zuordnung übernehmen",
+    "noRows": "Noch keine BoM-Zeilen geladen. Bitte zuerst hochladen oder Beispiel nutzen."
+  },
+  "parameters": {
+    "title": "Schritt 3 – Parameter",
+    "subtitle": "Platzhalter-Werte prüfen und bei Bedarf überschreiben.",
+    "productionWaste": "Produktionsausschuss",
+    "materialTableTitle": "Materialparameter",
+    "materialTableHint": "Platzhalter, bis echte Werte vorliegen.",
+    "placeholderNote": "TODO: mit validierten Werten aus Bracquene et al. (2020) ersetzen.",
+    "noProduct": "Bitte zuerst Spalten zuordnen."
+  },
+  "results": {
+    "title": "Schritt 4 – Ergebnisse",
+    "noResult": "Berechnung ausführen, um PCI zu sehen.",
+    "overallPci": "Gesamt-PCI",
+    "totalMass": "Gesamtmasse",
+    "totalWaste": "Abfall (Platzhalter)",
+    "totalVirgin": "Primärmaterial",
+    "componentPci": "PCI nach Komponente",
+    "materialPci": "PCI nach Material",
+    "componentTable": "Komponenten-Übersicht",
+    "materialTable": "Material-Übersicht",
+    "flowPlaceholder": "Fluss-Placeholder",
+    "flowHint": "Anteil von Rezyklat, Primärmaterial und Abfall (Platzhalter für zukünftige Fluss-/Sankey-Grafik).",
+    "recycledLabel": "Rezyklat",
+    "virginLabel": "Primär",
+    "wasteLabel": "Abfall",
+    "flowTodo": "TODO: durch eine echte Fluss-/Sankey-Visualisierung ersetzen.",
+    "mass": "Masse",
+    "pci": "PCI",
+    "notes": "Hinweise"
+  },
+  "whatIf": {
+    "title": "Schritt 5 – Was-wäre-wenn & Sensitivität",
+    "subtitle": "Einen Parameter ändern und Wirkung sehen.",
+    "helper": "Regler nutzen, um Effekte vorab zu prüfen.",
+    "baselineGauge": "Baseline-PCI",
+    "adjustedGauge": "Angepasster PCI",
+    "deltaTitle": "Differenz",
+    "deltaHint": "Positive Werte = Verbesserung (Platzhalter-Logik).",
+    "deltaCopy": "Baseline {{baseline}}% → Szenario {{scenario}}%",
+    "noData": "Bitte zuerst PCI berechnen."
+  },
+  "sensitivity": {
+    "title": "Top-Hebel (±10%)",
+    "subtitle": "Platzhalter-Sensitivität; wird später ersetzt.",
+    "leverDelta": "PCI {{from}}% → {{to}}%",
+    "lever": "Hebel",
+    "baseline": "Baseline",
+    "changed": "Geändert",
+    "delta": "Δ PCI"
+  },
+  "export": {
+    "title": "Schritt 6 – Export",
+    "subtitle": "Daten, Charts und PDF herunterladen.",
+    "csv": "CSV-Tabellen herunterladen",
+    "charts": "Charts als PNG",
+    "pdf": "PDF-Report",
+    "restart": "Neu beginnen",
+    "noData": "Bitte zuerst berechnen."
+  },
+  "actions": {
+    "next": "Weiter",
+    "back": "Zurück",
+    "calculate": "PCI berechnen",
+    "useManualData": "Manuelle Zeilen nutzen"
+  },
+  "fields": {
+    "productName": "Produktname",
+    "component": "Komponente",
+    "componentName": "Komponentenname",
+    "componentQuantity": "Menge der Komponente",
+    "componentMass": "Komponentenmasse (kg)",
+    "material": "Material",
+    "materialName": "Materialname",
+    "materialQuantity": "Materialmenge",
+    "materialUnit": "Materialeinheit",
+    "materialMass": "Materialmasse",
+    "recycledContent": "Rezyklatanteil (0-1)",
+    "recyclability": "Rezyklierbarkeit (0-1)"
+  }
+}

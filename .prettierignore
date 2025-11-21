@@ -1,0 +1,7 @@
+node_modules
+coverage
+dist
+playwright-report
+public
+.docs_cache
+docs/site

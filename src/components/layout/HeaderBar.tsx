@@ -1,0 +1,79 @@
+import { Group, SegmentedControl, Text, Title, Tooltip } from '@mantine/core';
+import { IconContrast, IconMoonStars, IconSun } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+import { useThemeMode } from '../../theme/ThemeProvider';
+import { ThemeMode } from '../../theme/theme';
+
+interface HeaderBarProps {
+  onReset: () => void;
+}
+
+const HeaderBar = ({ onReset }: HeaderBarProps) => {
+  const { t, i18n } = useTranslation();
+  const { mode, setMode } = useThemeMode();
+
+  return (
+    <Group justify="space-between" align="center">
+      <div>
+        <Title order={2}>{t('app.title')}</Title>
+        <Text size="sm" c="dimmed">
+          {t('app.tagline')}
+        </Text>
+        <Text size="xs" c="blue" onClick={onReset} style={{ cursor: 'pointer' }}>
+          {t('app.reset')}
+        </Text>
+      </div>
+      <Group gap="sm" wrap="nowrap">
+        <Tooltip label={t('nav.theme')}>
+          <SegmentedControl
+            data={[
+              {
+                value: 'light',
+                label: (
+                  <Group gap="xs">
+                    <IconSun size={16} />
+                    <Text size="xs">{t('nav.light')}</Text>
+                  </Group>
+                ),
+              },
+              {
+                value: 'dark',
+                label: (
+                  <Group gap="xs">
+                    <IconMoonStars size={16} />
+                    <Text size="xs">{t('nav.dark')}</Text>
+                  </Group>
+                ),
+              },
+              {
+                value: 'high-contrast',
+                label: (
+                  <Group gap="xs">
+                    <IconContrast size={16} />
+                    <Text size="xs">{t('nav.highContrast')}</Text>
+                  </Group>
+                ),
+              },
+            ]}
+            value={mode}
+            onChange={(value) => setMode(value as ThemeMode)}
+            size="xs"
+          />
+        </Tooltip>
+        <Tooltip label={t('nav.language')}>
+          <SegmentedControl
+            data={[
+              { label: 'EN', value: 'en' },
+              { label: 'DE', value: 'de' },
+            ]}
+            value={i18n.language.startsWith('de') ? 'de' : 'en'}
+            onChange={(value) => i18n.changeLanguage(value)}
+            size="xs"
+          />
+        </Tooltip>
+      </Group>
+    </Group>
+  );
+};
+
+export default HeaderBar;

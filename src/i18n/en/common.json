@@ -1,0 +1,121 @@
+{
+  "app": {
+    "title": "ProCirculariTool",
+    "tagline": "PCI exploration and reporting in your browser",
+    "reset": "Reset session"
+  },
+  "nav": {
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "highContrast": "High contrast",
+    "language": "Language"
+  },
+  "steps": {
+    "upload": { "title": "Upload or sample", "desc": "Load a BoM from file, sample, or manual entry." },
+    "mapping": { "title": "Column mapping", "desc": "Map source columns to the canonical schema." },
+    "parameters": { "title": "Parameters", "desc": "Set defaults and overrides." },
+    "results": { "title": "Results", "desc": "PCI and material/component breakdown." },
+    "whatif": { "title": "What-if & sensitivity", "desc": "Adjust inputs and see impact." }
+  },
+  "upload": {
+    "title": "Step 1 – Bring your BoM",
+    "subtitle": "Upload CSV/XLSX, load a sample, or create rows manually.",
+    "washingMachine": "Washing machine sample",
+    "guardLock": "Guard lock switch sample",
+    "chooseFile": "CSV or XLSX file",
+    "placeholder": "Select a BoM file...",
+    "uploadCta": "Upload & parse",
+    "privacyNotice": "Files are parsed locally in your browser. No BoM data leaves the tab.",
+    "manualEntry": "Manual entry",
+    "manualEntryHint": "Create or tweak rows directly in the browser.",
+    "addRow": "Add row",
+    "preview": "Preview (first 5 rows)",
+    "previewHint": "Map the columns in the next step."
+  },
+  "mapping": {
+    "title": "Step 2 – Map your columns",
+    "subtitle": "Align your source headers to the canonical fields.",
+    "apply": "Apply mapping",
+    "noRows": "No BoM rows loaded yet. Upload or load a sample first."
+  },
+  "parameters": {
+    "title": "Step 3 – Parameters",
+    "subtitle": "Use defaults or override per material. Placeholder values will be replaced later.",
+    "productionWaste": "Production waste fraction",
+    "materialTableTitle": "Material parameters",
+    "materialTableHint": "Defaults are placeholders; adjust as needed.",
+    "placeholderNote": "TODO: replace with validated parameters from Bracquene et al. (2020).",
+    "noProduct": "Please finish mapping first."
+  },
+  "results": {
+    "title": "Step 4 – Results",
+    "noResult": "Run the calculation to see PCI results.",
+    "overallPci": "Overall PCI",
+    "totalMass": "Total product mass",
+    "totalWaste": "Waste (placeholder)",
+    "totalVirgin": "Virgin material flow",
+    "componentPci": "PCI by component",
+    "materialPci": "PCI by material",
+    "componentTable": "Component breakdown",
+    "materialTable": "Material breakdown",
+    "flowPlaceholder": "Flow placeholder",
+    "flowHint": "Indicative split of recycled, virgin, and waste mass (placeholder for future Sankey/flow view).",
+    "recycledLabel": "Recycled",
+    "virginLabel": "Virgin",
+    "wasteLabel": "Waste",
+    "flowTodo": "TODO: replace with a proper Sankey/flow diagram when data definitions are finalized.",
+    "mass": "Mass",
+    "pci": "PCI",
+    "notes": "Notes"
+  },
+  "whatIf": {
+    "title": "Step 5 – What-if and sensitivity",
+    "subtitle": "Tweak a key parameter and view the impact instantly.",
+    "helper": "Use sliders to explore impact before committing to changes.",
+    "baselineGauge": "Baseline PCI",
+    "adjustedGauge": "Adjusted PCI",
+    "deltaTitle": "Difference",
+    "deltaHint": "Positive values indicate an improvement (placeholder logic).",
+    "deltaCopy": "Baseline {{baseline}}% → Scenario {{scenario}}%",
+    "noData": "Calculate PCI before running what-if."
+  },
+  "sensitivity": {
+    "title": "Top improvement levers (±10%)",
+    "subtitle": "Placeholder sensitivity; replace when full equations arrive.",
+    "leverDelta": "PCI {{from}}% → {{to}}%",
+    "lever": "Lever",
+    "baseline": "Baseline",
+    "changed": "Changed",
+    "delta": "Δ PCI"
+  },
+  "export": {
+    "title": "Step 6 – Export",
+    "subtitle": "Download data, charts, and a PDF report.",
+    "csv": "Download CSV tables",
+    "charts": "Download charts (PNG)",
+    "pdf": "Download PDF report",
+    "restart": "Start over",
+    "noData": "Run a calculation to export results."
+  },
+  "actions": {
+    "next": "Next",
+    "back": "Back",
+    "calculate": "Calculate PCI",
+    "useManualData": "Use manual rows"
+  },
+  "fields": {
+    "productName": "Product name",
+    "component": "Component",
+    "componentName": "Component name",
+    "componentQuantity": "Component quantity",
+    "componentMass": "Component mass (kg)",
+    "material": "Material",
+    "materialName": "Material name",
+    "materialQuantity": "Material quantity",
+    "materialUnit": "Material unit",
+    "materialMass": "Material mass",
+    "recycledContent": "Recycled content (0-1)",
+    "recyclability": "Recyclability (0-1)"
+  }
+}
