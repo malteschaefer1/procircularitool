@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { RawBomRow } from './types';
 
 export const parseCsvFile = (file: File): Promise<RawBomRow[]> =>
@@ -15,12 +15,27 @@ export const parseCsvFile = (file: File): Promise<RawBomRow[]> =>
 
 export const parseXlsxFile = async (file: File): Promise<RawBomRow[]> => {
   const buffer = await file.arrayBuffer();
-  const workbook = XLSX.read(buffer, { type: 'array' });
-  const firstSheet = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[firstSheet];
-  const rows = XLSX.utils.sheet_to_json<RawBomRow>(worksheet, {
-    defval: '',
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(buffer);
+  const sheet = workbook.worksheets[0];
+  if (!sheet) return [];
+
+  const headers: string[] = [];
+  sheet.getRow(1).eachCell((cell, colNumber) => {
+    headers[colNumber - 1] = String(cell.value ?? `column_${colNumber}`);
   });
+
+  const rows: RawBomRow[] = [];
+  sheet.eachRow((row, rowNumber) => {
+    if (rowNumber === 1) return;
+    const rowData: RawBomRow = {};
+    row.eachCell((cell, colNumber) => {
+      const key = headers[colNumber - 1];
+      rowData[key] = cell.value as RawBomRow[string];
+    });
+    rows.push(rowData);
+  });
+
   return rows;
 };
 

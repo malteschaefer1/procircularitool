@@ -6,6 +6,7 @@
 - Zustand for lightweight state sharing
 - React-i18next for English/German translations
 - Recharts for charts, jsPDF + html2canvas for client-side PDF export
+- ExcelJS for XLSX parsing; PapaParse for CSV parsing
 - Vitest + Testing Library for unit tests; Playwright for E2E
 - MkDocs Material for docs
 

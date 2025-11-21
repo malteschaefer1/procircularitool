@@ -1,6 +1,6 @@
 # User Guide
 
-1. **Upload or sample**: Upload your BoM as CSV/XLSX or pick one of the provided samples (washing machine, guard lock switch). Manual table entry is also available.
+1. **Upload or sample**: Upload your BoM as CSV/XLSX (parsed locally with PapaParse/ExcelJS) or pick one of the provided samples (washing machine, guard lock switch). Manual table entry is also available.
 2. **Column mapping**: Map source headers (component, material, quantities, units, recycled content, recyclability) to the canonical schema using the mapping UI.
 3. **Set parameters**: Review placeholder defaults for production waste and material parameters; override as needed.
 4. **Run calculation**: Trigger the placeholder PCI calculation to see overall, component, and material-level PCI plus mass and flow summaries.

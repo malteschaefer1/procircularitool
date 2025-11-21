@@ -5,7 +5,7 @@ A browser-based Product Circularity Index (PCI) explorer for sustainability and 
 > **Important:** PCI equations are placeholders. Replace them with the Bracquene et al. (2020) formulations when available.
 
 ## Features
-- CSV/XLSX upload, manual entry, and two sample BoMs (washing machine, guard lock switch)
+- CSV/XLSX upload (parsed locally with PapaParse + ExcelJS), manual entry, and two sample BoMs (washing machine, guard lock switch)
 - Column mapping UI to align arbitrary headers with the canonical schema
 - Placeholder calculation engine with component/material breakdowns, totals, and notes
 - What-if sliders and sensitivity analysis (±10% levers) with gauges and bar charts
