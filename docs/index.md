@@ -9,8 +9,8 @@ ProCirculariTool is a browser-based tool to explore and report the Product Circu
 - Mantine UI with light, dark, and high-contrast themes
 - Bilingual UI (English/German) via react-i18next
 - Local parsing for CSV/XLSX BoMs; sample case studies included
-- Placeholder calculation engine with sensitivity analysis
-- Chart-based dashboards + PDF/CSV exports
+- PCI logic based on Bracquene et al. (2020) (DOI:10.1016/j.resconrec.2020.104886) decomposed to component/material level
+- Sensitivity analysis, charts, and PDF/CSV exports
 
 ## Quick start
 ```bash

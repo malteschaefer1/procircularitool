@@ -42,5 +42,6 @@ describe('mapRowsToProduct', () => {
     expect(product.components).toHaveLength(1);
     expect(product.components[0].materials).toHaveLength(2);
     expect(product.components[0].totalMassKg).toBeGreaterThan(1.9);
+    expect(product.components[0].materials[0].materialParameters?.fr).toBeDefined();
   });
 });

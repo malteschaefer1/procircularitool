@@ -11,11 +11,8 @@ export const runSensitivityAnalysis = (input: CalculationInput): SensitivityResu
   const levers: SensitivityLever[] = [];
 
   input.product.components.forEach((component) => {
-    const baseWaste = component.componentParameters?.wasteFraction ??
-      input.product.productParameters?.productionWasteFraction ??
-      0.05;
-
-    const decreasedWaste = clamp(baseWaste * 0.9);
+    const baseIntensity = component.componentParameters?.intensity ?? 1;
+    const decreasedIntensity = clamp(baseIntensity * 0.9, 0, 10);
     const decreasedInput = cloneInput(input);
     const targetComponent = decreasedInput.product.components.find(
       (c) => c.componentId === component.componentId,
@@ -23,14 +20,14 @@ export const runSensitivityAnalysis = (input: CalculationInput): SensitivityResu
     if (targetComponent) {
       targetComponent.componentParameters = {
         ...targetComponent.componentParameters,
-        wasteFraction: decreasedWaste,
+        intensity: decreasedIntensity,
       };
       const result = calculatePci(decreasedInput);
       levers.push({
-        id: `${component.componentId}-waste`,
-        label: `${component.componentName}: waste fraction`,
-        baselineValue: baseWaste,
-        changedValue: decreasedWaste,
+        id: `${component.componentId}-intensity`,
+        label: `${component.componentName}: intensity`,
+        baselineValue: baseIntensity,
+        changedValue: decreasedIntensity,
         baselinePci: baseline.pciOverall,
         newPci: result.pciOverall,
         delta: result.pciOverall - baseline.pciOverall,
@@ -41,8 +38,8 @@ export const runSensitivityAnalysis = (input: CalculationInput): SensitivityResu
 
   input.product.components.forEach((component) => {
     component.materials.forEach((material) => {
-      const baseRecycled = material.materialParameters?.recycledContentFraction ?? 0;
-      const increased = clamp(baseRecycled * 1.1 + 0.05);
+      const baseFr = material.materialParameters?.fr ?? 0;
+      const increasedFr = clamp(baseFr * 1.1 + 0.05);
       const modifiedInput = cloneInput(input);
       const targetComponent = modifiedInput.product.components.find(
         (c) => c.componentId === component.componentId,
@@ -53,14 +50,14 @@ export const runSensitivityAnalysis = (input: CalculationInput): SensitivityResu
       if (targetMaterial) {
         targetMaterial.materialParameters = {
           ...targetMaterial.materialParameters,
-          recycledContentFraction: increased,
+          fr: increasedFr,
         };
         const result = calculatePci(modifiedInput);
         levers.push({
-          id: `${material.materialId}-rc`,
-          label: `${component.componentName}: ${material.materialName} recycled content`,
-          baselineValue: baseRecycled,
-          changedValue: increased,
+          id: `${material.materialId}-fr`,
+          label: `${component.componentName}: ${material.materialName} F_r`,
+          baselineValue: baseFr,
+          changedValue: increasedFr,
           baselinePci: baseline.pciOverall,
           newPci: result.pciOverall,
           delta: result.pciOverall - baseline.pciOverall,
@@ -68,24 +65,24 @@ export const runSensitivityAnalysis = (input: CalculationInput): SensitivityResu
         });
       }
 
-      const baseRecyclability = material.materialParameters?.recyclability ?? 0.5;
-      const increasedRecyclability = clamp(baseRecyclability * 1.1 + 0.05);
-      const modifiedRecyclabilityInput = cloneInput(input);
-      const targetComp = modifiedRecyclabilityInput.product.components.find(
+      const baseEms = material.materialParameters?.e_ms ?? 1;
+      const increasedEms = clamp(baseEms * 1.05 + 0.02);
+      const modifiedEmsInput = cloneInput(input);
+      const targetComp = modifiedEmsInput.product.components.find(
         (c) => c.componentId === component.componentId,
       );
       const targetMat = targetComp?.materials.find((m) => m.materialId === material.materialId);
       if (targetMat) {
         targetMat.materialParameters = {
           ...targetMat.materialParameters,
-          recyclability: increasedRecyclability,
+          e_ms: increasedEms,
         };
-        const result = calculatePci(modifiedRecyclabilityInput);
+        const result = calculatePci(modifiedEmsInput);
         levers.push({
-          id: `${material.materialId}-recyclability`,
-          label: `${component.componentName}: ${material.materialName} recyclability`,
-          baselineValue: baseRecyclability,
-          changedValue: increasedRecyclability,
+          id: `${material.materialId}-ems`,
+          label: `${component.componentName}: ${material.materialName} E_ms`,
+          baselineValue: baseEms,
+          changedValue: increasedEms,
           baselinePci: baseline.pciOverall,
           newPci: result.pciOverall,
           delta: result.pciOverall - baseline.pciOverall,

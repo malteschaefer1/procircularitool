@@ -45,7 +45,9 @@
     "productionWaste": "Production waste fraction",
     "materialTableTitle": "Material parameters",
     "materialTableHint": "Defaults are placeholders; adjust as needed.",
-    "placeholderNote": "TODO: replace with validated parameters from Bracquene et al. (2020).",
+    "placeholderNote": "Implements Bracquene et al. (2020) PCI logic; placeholders should be validated (DOI:10.1016/j.resconrec.2020.104886).",
+    "componentUseFactors": "Component use factors (I, L, I_d,c, L_d,c)",
+    "materialRowHelper": "Edit F_u, F_r, C_u, C_r, C_cp, C_fp, E_fp, E_cp, E_ms, E_rfp (0-1).",
     "noProduct": "Please finish mapping first."
   },
   "results": {
@@ -59,6 +61,10 @@
     "materialPci": "PCI by material",
     "componentTable": "Component breakdown",
     "materialTable": "Material breakdown",
+    "lfi": "Linear flow index",
+    "lfiOverall": "Overall LFI",
+    "lfiComponent": "LFI by component",
+    "lfiMaterial": "LFI by material",
     "flowPlaceholder": "Flow placeholder",
     "flowHint": "Indicative split of recycled, virgin, and waste mass (placeholder for future Sankey/flow view).",
     "recycledLabel": "Recycled",

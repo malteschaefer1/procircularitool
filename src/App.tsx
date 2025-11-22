@@ -31,7 +31,13 @@ const App = () => {
       </AppShell.Header>
       <AppShell.Main>
         <Container size="xl" py="md">
-          <Stepper active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect>
+          <Stepper
+            active={activeStep}
+            onStepClick={setActiveStep}
+            allowNextStepsSelect
+            orientation="vertical"
+            color="teal"
+          >
             <Stepper.Step label={t('steps.upload.title')} description={t('steps.upload.desc')}>
               <UploadSection onProceed={nextStep} />
             </Stepper.Step>

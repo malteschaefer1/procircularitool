@@ -46,9 +46,11 @@ const ResultsView = ({ result, containerRef }: ResultsViewProps) => {
   }));
 
   const totalMass = result.totalProductMassKg || 1;
-  const virginShare = Math.max(0, Math.min(100, (result.totalVirginMaterialFlowKg / totalMass) * 100));
+  const virginShare = Math.max(0, Math.min(100, (result.totalVirginMassKg / totalMass) * 100));
   const wasteShare = Math.max(0, Math.min(100, (result.totalWasteMassKg / totalMass) * 100));
   const recycledShare = Math.max(0, Math.min(100, 100 - virginShare - wasteShare));
+  const virginMass = result.totalVirginMassKg || 0;
+  const wasteMass = result.totalWasteMassKg || 0;
 
   return (
     <Stack gap="md" ref={containerRef}>
@@ -69,13 +71,13 @@ const ResultsView = ({ result, containerRef }: ResultsViewProps) => {
               <Text size="sm" c="dimmed">
                 {t('results.totalWaste')}
               </Text>
-              <Text fw={700}>{formatMass(result.totalWasteMassKg)}</Text>
+              <Text fw={700}>{formatMass(wasteMass)}</Text>
             </Card>
             <Card withBorder>
               <Text size="sm" c="dimmed">
                 {t('results.totalVirgin')}
               </Text>
-              <Text fw={700}>{formatMass(result.totalVirginMaterialFlowKg)}</Text>
+              <Text fw={700}>{formatMass(virginMass)}</Text>
             </Card>
           </SimpleGrid>
         </Grid.Col>
@@ -108,6 +110,38 @@ const ResultsView = ({ result, containerRef }: ResultsViewProps) => {
         <Text size="xs" c="dimmed" mt="xs">
           {t('results.flowTodo')}
         </Text>
+      </Card>
+
+      <Card withBorder shadow="sm">
+        <Title order={5}>{t('results.lfi')}</Title>
+        <SimpleGrid cols={{ base: 1, md: 3 }} spacing="sm">
+          <Card withBorder>
+            <Text size="sm" c="dimmed">
+              {t('results.lfiOverall')}
+            </Text>
+            <Text fw={700}>{(result.lfiOverall * 100).toFixed(1)}%</Text>
+          </Card>
+          <Card withBorder>
+            <Text size="sm" c="dimmed">
+              {t('results.lfiComponent')}
+            </Text>
+            {result.lfiByComponent.map((c) => (
+              <Text key={c.componentId} size="sm">
+                {c.componentName}: {(c.lfi * 100).toFixed(1)}%
+              </Text>
+            ))}
+          </Card>
+          <Card withBorder>
+            <Text size="sm" c="dimmed">
+              {t('results.lfiMaterial')}
+            </Text>
+            {result.lfiByMaterial.map((m) => (
+              <Text key={m.materialId} size="sm">
+                {m.materialName}: {(m.lfi * 100).toFixed(1)}%
+              </Text>
+            ))}
+          </Card>
+        </SimpleGrid>
       </Card>
 
       <Card withBorder shadow="sm">

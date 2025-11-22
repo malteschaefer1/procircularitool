@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import './i18n';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { ThemeProvider } from './theme/ThemeProvider';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

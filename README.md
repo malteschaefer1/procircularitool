@@ -1,8 +1,6 @@
 # ProCirculariTool
 
-A browser-based Product Circularity Index (PCI) explorer for sustainability and product teams. Upload or create a Bill of Materials (BoM), map columns to a canonical schema, run placeholder PCI logic, explore what-if scenarios, and export dashboards—all without sending data off the device.
-
-> **Important:** PCI equations are placeholders. Replace them with the Bracquene et al. (2020) formulations when available.
+A browser-based Product Circularity Index (PCI) explorer for sustainability and product teams. Upload or create a Bill of Materials (BoM), map columns to a canonical schema, run the Bracquene et al. (2020) PCI logic (DOI:10.1016/j.resconrec.2020.104886) decomposed to component/material level, explore what-if scenarios, and export dashboards—all without sending data off the device.
 
 ## Features
 - CSV/XLSX upload (parsed locally with PapaParse + ExcelJS), manual entry, and two sample BoMs (washing machine, guard lock switch)

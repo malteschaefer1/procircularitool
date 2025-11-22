@@ -18,7 +18,7 @@ const parseNumber = (value: string | number | undefined): number | undefined => 
 const pickMaterialParameters = (materialName?: string) => {
   if (!materialName) return undefined;
   const key = materialName.toLowerCase();
-  return defaultMaterialParameters[key];
+  return defaultMaterialParameters[key] ?? defaultMaterialParameters.default;
 };
 
 export const guessMappingFromColumns = (columns: string[]): ColumnMapping => {
@@ -71,9 +71,18 @@ export const mapRowsToProduct = (
       massKg: materialMassKg,
       density,
       materialParameters: {
-        recycledContentFraction:
-          recycledContent ?? pickMaterialParameters(materialName)?.recycledContentFraction,
-        recyclability: recyclability ?? pickMaterialParameters(materialName)?.recyclability,
+        // Map earlier recycled content field to Fr if present
+        fr: recycledContent ?? pickMaterialParameters(materialName)?.fr,
+        // Recyclability field loosely mapped to Cr (collection for recycling) if provided
+        cr: recyclability ?? pickMaterialParameters(materialName)?.cr,
+        fu: pickMaterialParameters(materialName)?.fu,
+        cu: pickMaterialParameters(materialName)?.cu,
+        ccp: pickMaterialParameters(materialName)?.ccp,
+        cfp: pickMaterialParameters(materialName)?.cfp,
+        e_fp: pickMaterialParameters(materialName)?.e_fp,
+        e_cp: pickMaterialParameters(materialName)?.e_cp,
+        e_ms: pickMaterialParameters(materialName)?.e_ms,
+        e_rfp: pickMaterialParameters(materialName)?.e_rfp,
       },
     };
 

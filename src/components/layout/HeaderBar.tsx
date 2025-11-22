@@ -30,27 +30,33 @@ const HeaderBar = ({ onReset }: HeaderBarProps) => {
               {
                 value: 'light',
                 label: (
-                  <Group gap="xs">
+                  <Group gap="xs" wrap="nowrap">
                     <IconSun size={16} />
-                    <Text size="xs">{t('nav.light')}</Text>
+                    <Text size="xs" style={{ whiteSpace: 'nowrap' }}>
+                      {t('nav.light')}
+                    </Text>
                   </Group>
                 ),
               },
               {
                 value: 'dark',
                 label: (
-                  <Group gap="xs">
+                  <Group gap="xs" wrap="nowrap">
                     <IconMoonStars size={16} />
-                    <Text size="xs">{t('nav.dark')}</Text>
+                    <Text size="xs" style={{ whiteSpace: 'nowrap' }}>
+                      {t('nav.dark')}
+                    </Text>
                   </Group>
                 ),
               },
               {
                 value: 'high-contrast',
                 label: (
-                  <Group gap="xs">
+                  <Group gap="xs" wrap="nowrap">
                     <IconContrast size={16} />
-                    <Text size="xs">{t('nav.highContrast')}</Text>
+                    <Text size="xs" style={{ whiteSpace: 'nowrap' }}>
+                      {t('nav.highContrast')}
+                    </Text>
                   </Group>
                 ),
               },

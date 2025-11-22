@@ -45,7 +45,9 @@
     "productionWaste": "Produktionsausschuss",
     "materialTableTitle": "Materialparameter",
     "materialTableHint": "Platzhalter, bis echte Werte vorliegen.",
-    "placeholderNote": "TODO: mit validierten Werten aus Bracquene et al. (2020) ersetzen.",
+    "placeholderNote": "Implementiert Bracquene et al. (2020) PCI-Logik; Platzhalter müssen validiert werden (DOI:10.1016/j.resconrec.2020.104886).",
+    "componentUseFactors": "Nutzungsfaktoren der Komponente (I, L, I_d,c, L_d,c)",
+    "materialRowHelper": "Bearbeite F_u, F_r, C_u, C_r, C_cp, C_fp, E_fp, E_cp, E_ms, E_rfp (0-1).",
     "noProduct": "Bitte zuerst Spalten zuordnen."
   },
   "results": {
@@ -59,6 +61,10 @@
     "materialPci": "PCI nach Material",
     "componentTable": "Komponenten-Übersicht",
     "materialTable": "Material-Übersicht",
+    "lfi": "Linearer Flussindex",
+    "lfiOverall": "Gesamt-LFI",
+    "lfiComponent": "LFI nach Komponente",
+    "lfiMaterial": "LFI nach Material",
     "flowPlaceholder": "Fluss-Placeholder",
     "flowHint": "Anteil von Rezyklat, Primärmaterial und Abfall (Platzhalter für zukünftige Fluss-/Sankey-Grafik).",
     "recycledLabel": "Rezyklat",

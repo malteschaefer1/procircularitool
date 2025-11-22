@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Group, NumberInput, Stack, Table, Text, Title } from '@mantine/core';
+import { Alert, Button, Card, Group, NumberInput, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { calculatePci } from '../../core/calculationEngine';
@@ -30,10 +30,31 @@ const ParameterPanel = ({ onCalculated }: ParameterPanelProps) => {
     });
   };
 
+  const updateComponentUseFactor = (
+    componentId: string,
+    key: 'intensity' | 'lifetime' | 'intensityReference' | 'lifetimeReference',
+    value: number,
+  ) => {
+    setProduct({
+      ...product,
+      components: product.components.map((component) =>
+        component.componentId === componentId
+          ? {
+              ...component,
+              componentParameters: {
+                ...component.componentParameters,
+                [key]: value,
+              },
+            }
+          : component,
+      ),
+    });
+  };
+
   const updateMaterialParam = (
     componentId: string,
     materialId: string,
-    field: 'recycledContentFraction' | 'recyclability',
+    field: keyof NonNullable<typeof product.components[number]['materials'][number]['materialParameters']>,
     value: number,
   ) => {
     setProduct({
@@ -63,10 +84,6 @@ const ParameterPanel = ({ onCalculated }: ParameterPanelProps) => {
     onCalculated();
   };
 
-  const materialRows = product.components.flatMap((component) =>
-    component.materials.map((material) => ({ component, material })),
-  );
-
   return (
     <Stack gap="md">
       <Card withBorder shadow="sm">
@@ -92,62 +109,160 @@ const ParameterPanel = ({ onCalculated }: ParameterPanelProps) => {
         </Text>
       </Card>
 
-      <Card withBorder shadow="sm">
-        <Title order={5}>{t('parameters.materialTableTitle')}</Title>
-        <Text size="sm" c="dimmed" mb="xs">
-          {t('parameters.materialTableHint')}
-        </Text>
-        <Table striped highlightOnHover withRowBorders>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>{t('fields.component')}</Table.Th>
-              <Table.Th>{t('fields.material')}</Table.Th>
-              <Table.Th>{t('fields.recycledContent')}</Table.Th>
-              <Table.Th>{t('fields.recyclability')}</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {materialRows.map((row) => (
-              <Table.Tr key={`${row.component.componentId}-${row.material.materialId}`}>
-                <Table.Td>{row.component.componentName}</Table.Td>
-                <Table.Td>{row.material.materialName}</Table.Td>
-                <Table.Td>
+      {product.components.map((component) => (
+        <Card key={component.componentId} withBorder shadow="sm">
+          <Group justify="space-between" mb="xs">
+            <div>
+              <Title order={5}>{component.componentName}</Title>
+              <Text size="xs" c="dimmed">
+                {t('parameters.componentUseFactors')}
+              </Text>
+            </div>
+            <Group gap="xs">
+              <NumberInput
+                label="I_c"
+                min={0}
+                value={component.componentParameters?.intensity ?? 1}
+                onChange={(value) => updateComponentUseFactor(component.componentId, 'intensity', Number(value ?? 1))}
+              />
+              <NumberInput
+                label="L_c"
+                min={0}
+                value={component.componentParameters?.lifetime ?? 1}
+                onChange={(value) => updateComponentUseFactor(component.componentId, 'lifetime', Number(value ?? 1))}
+              />
+              <NumberInput
+                label="I_d,c"
+                min={0}
+                value={component.componentParameters?.intensityReference ?? 1}
+                onChange={(value) =>
+                  updateComponentUseFactor(component.componentId, 'intensityReference', Number(value ?? 1))
+                }
+              />
+              <NumberInput
+                label="L_d,c"
+                min={0}
+                value={component.componentParameters?.lifetimeReference ?? 1}
+                onChange={(value) =>
+                  updateComponentUseFactor(component.componentId, 'lifetimeReference', Number(value ?? 1))
+                }
+              />
+            </Group>
+          </Group>
+          <Stack gap="sm">
+            {component.materials.map((material) => (
+              <Card key={material.materialId} withBorder shadow="xs" radius="md">
+                <Title order={6}>{material.materialName}</Title>
+                <Text size="xs" c="dimmed" mb="xs">
+                  {t('parameters.materialRowHelper')}
+                </Text>
+                <SimpleGrid cols={{ base: 2, md: 4 }} spacing="xs">
                   <NumberInput
-                    value={row.material.materialParameters?.recycledContentFraction ?? 0}
+                    label="F_u"
                     min={0}
                     max={1}
                     step={0.05}
+                    value={material.materialParameters?.fu ?? 1}
                     onChange={(value) =>
-                      updateMaterialParam(
-                        row.component.componentId,
-                        row.material.materialId,
-                        'recycledContentFraction',
-                        Number(value ?? 0),
-                      )
+                      updateMaterialParam(component.componentId, material.materialId, 'fu', Number(value ?? 0))
                     }
                   />
-                </Table.Td>
-                <Table.Td>
                   <NumberInput
-                    value={row.material.materialParameters?.recyclability ?? 0.5}
+                    label="F_r"
                     min={0}
                     max={1}
                     step={0.05}
+                    value={material.materialParameters?.fr ?? 0}
                     onChange={(value) =>
-                      updateMaterialParam(
-                        row.component.componentId,
-                        row.material.materialId,
-                        'recyclability',
-                        Number(value ?? 0),
-                      )
+                      updateMaterialParam(component.componentId, material.materialId, 'fr', Number(value ?? 0))
                     }
                   />
-                </Table.Td>
-              </Table.Tr>
+                  <NumberInput
+                    label="C_u"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={material.materialParameters?.cu ?? 0}
+                    onChange={(value) =>
+                      updateMaterialParam(component.componentId, material.materialId, 'cu', Number(value ?? 0))
+                    }
+                  />
+                  <NumberInput
+                    label="C_r"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={material.materialParameters?.cr ?? 0}
+                    onChange={(value) =>
+                      updateMaterialParam(component.componentId, material.materialId, 'cr', Number(value ?? 0))
+                    }
+                  />
+                  <NumberInput
+                    label="C_cp"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={material.materialParameters?.ccp ?? 0}
+                    onChange={(value) =>
+                      updateMaterialParam(component.componentId, material.materialId, 'ccp', Number(value ?? 0))
+                    }
+                  />
+                  <NumberInput
+                    label="C_fp"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={material.materialParameters?.cfp ?? 0}
+                    onChange={(value) =>
+                      updateMaterialParam(component.componentId, material.materialId, 'cfp', Number(value ?? 0))
+                    }
+                  />
+                  <NumberInput
+                    label="E_fp"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={material.materialParameters?.e_fp ?? 1}
+                    onChange={(value) =>
+                      updateMaterialParam(component.componentId, material.materialId, 'e_fp', Number(value ?? 0))
+                    }
+                  />
+                  <NumberInput
+                    label="E_cp"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={material.materialParameters?.e_cp ?? 1}
+                    onChange={(value) =>
+                      updateMaterialParam(component.componentId, material.materialId, 'e_cp', Number(value ?? 0))
+                    }
+                  />
+                  <NumberInput
+                    label="E_ms"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={material.materialParameters?.e_ms ?? 1}
+                    onChange={(value) =>
+                      updateMaterialParam(component.componentId, material.materialId, 'e_ms', Number(value ?? 0))
+                    }
+                  />
+                  <NumberInput
+                    label="E_rfp"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={material.materialParameters?.e_rfp ?? 1}
+                    onChange={(value) =>
+                      updateMaterialParam(component.componentId, material.materialId, 'e_rfp', Number(value ?? 0))
+                    }
+                  />
+                </SimpleGrid>
+              </Card>
             ))}
-          </Table.Tbody>
-        </Table>
-      </Card>
+          </Stack>
+        </Card>
+      ))}
 
       <Group justify="flex-end">
         <Button onClick={calculate} data-testid="calculate-pci">

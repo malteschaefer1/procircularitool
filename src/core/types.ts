@@ -1,17 +1,36 @@
 export type Unit = 'kg' | 'g' | 'mg' | 't' | 'lb' | 'pcs';
 
 export interface ProductParameters {
-  productionWasteFraction?: number; // TODO: replace with validated parameter set from Bracquene et al.
+  productionWasteFraction?: number;
   takeBackRate?: number;
+  // Use factors for the whole product (optional, component values preferred)
+  intensity?: number;
+  lifetime?: number;
+  intensityReference?: number;
+  lifetimeReference?: number;
 }
 
 export interface ComponentParameters {
   wasteFraction?: number;
+  // Use factor inputs (defaults to 1 if omitted)
+  intensity?: number;
+  lifetime?: number;
+  intensityReference?: number;
+  lifetimeReference?: number;
 }
 
 export interface MaterialParameters {
-  recycledContentFraction?: number;
-  recyclability?: number;
+  // Fractions 0–1
+  fu?: number; // functional utilization factor (fraction of mass actually used)
+  fr?: number; // recycled content fraction
+  cu?: number; // fraction of collected for reuse
+  cr?: number; // fraction collected for recycling
+  ccp?: number; // component production scrap fraction
+  cfp?: number; // feedstock production scrap fraction (not in list, required by formulas)
+  e_fp?: number; // feedstock production efficiency
+  e_cp?: number; // component production efficiency
+  e_ms?: number; // material separation efficiency
+  e_rfp?: number; // recycled feedstock production efficiency
 }
 
 export interface Material {
@@ -49,9 +68,14 @@ export interface CalculationResult {
   pciOverall: number;
   pciByComponent: Array<{ componentId: string; componentName: string; pci: number; massKg: number }>;
   pciByMaterial: Array<{ materialId: string; materialName: string; pci: number; massKg: number }>;
+   lfiOverall: number;
+   lfiByComponent: Array<{ componentId: string; componentName: string; lfi: number }>;
+   lfiByMaterial: Array<{ materialId: string; materialName: string; lfi: number }>;
   totalProductMassKg: number;
-  totalWasteMassKg: number;
-  totalVirginMaterialFlowKg: number;
+  totalVirginMassKg: number; // V
+  totalWasteMassKg: number; // W
+  totalRecycledMassKg: number; // R
+  totalReusedMassKg: number; // C
   notes?: string[];
 }
 
