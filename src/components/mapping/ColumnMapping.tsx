@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Alert, Button, Card, Grid, Group, Select, Stack, Text, TextInput, Title } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
@@ -14,13 +14,32 @@ const ColumnMappingStep = ({ onProceed }: ColumnMappingProps) => {
   const { t } = useTranslation();
   const { rawRows, mapping, setMapping, setProduct, setCalculationResult, productName, setProductName } =
     useAppStore();
-  const [localMapping, setLocalMapping] = useState<ColumnMapping | null>(mapping);
-
   const columns = useMemo(() => (rawRows.length > 0 ? Object.keys(rawRows[0]) : []), [rawRows]);
-  const activeMapping = localMapping ?? (columns.length > 0 ? guessMappingFromColumns(columns) : null);
+  const guessedMapping = useMemo(
+    () => (columns.length > 0 ? guessMappingFromColumns(columns) : null),
+    [columns],
+  );
+  const [localMapping, setLocalMapping] = useState<ColumnMapping | null>(mapping ?? guessedMapping);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (mapping) setLocalMapping(mapping);
+  }, [mapping]);
+
+  useEffect(() => {
+    if (!localMapping && guessedMapping) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setLocalMapping(guessedMapping);
+    }
+  }, [localMapping, guessedMapping]);
+
+  const activeMapping = localMapping ?? guessedMapping;
 
   const updateMappingField = (field: keyof ColumnMapping, value: string | null) => {
-    setLocalMapping((prev) => ({ ...(prev ?? ({} as ColumnMapping)), [field]: value ?? undefined }));
+    setLocalMapping((prev) => ({
+      ...(prev ?? activeMapping ?? ({} as ColumnMapping)),
+      [field]: value ?? undefined,
+    }));
   };
 
   const applyMapping = () => {

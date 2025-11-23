@@ -27,7 +27,8 @@ export const guessMappingFromColumns = (columns: string[]): ColumnMapping => {
 
   return {
     componentName: find('component', 'subassembly') ?? columns[0],
-    componentQuantity: find('component_qty', 'component quantity', 'component_qty', 'comp_qty') ?? undefined,
+    componentQuantity:
+      find('component_quantity', 'component_qty', 'component quantity', 'component_qty', 'comp_qty') ?? undefined,
     componentMass: find('component_mass', 'component mass') ?? undefined,
     materialName: find('material') ?? columns[0],
     materialQuantity: find('material_qty', 'qty', 'quantity', 'mass') ?? undefined,
