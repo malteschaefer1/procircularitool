@@ -1,8 +1,9 @@
 {
   "app": {
     "title": "ProCirculariTool",
-    "tagline": "PCI exploration and reporting in your browser",
-    "reset": "Reset session"
+    "tagline": "Calculate a product circularity indicator (PCI) based on a Bill-of-Materials (BoM). Based on the methodology by <0>Braquené et al. (2020)</0>",
+    "reset": "Reset session",
+    "contact": "Malte Schäfer · Uni Wuppertal · <0>mschaefer@uni-wuppertal.de</0>"
   },
   "nav": {
     "theme": "Theme",
@@ -35,20 +36,49 @@
   },
   "mapping": {
     "title": "Step 2 – Map your columns",
-    "subtitle": "Align your source headers to the canonical fields.",
+    "subtitle": "Align your source headers to the canonical fields used by the tool.",
+    "recommendedHeaders": "Recommended headers: component_id, component_name, component_mass_kg, component_quantity, material_type, material_mass_per_component_kg. Unmapped columns are ignored.",
+    "massBalanceErrorTitle": "Please review your BoM",
+    "massBalanceErrorItem": "Component {{component}}: materials sum to {{materials}} vs component_mass_kg {{declared}} (Δ {{diff}}). Adjust the component mass or the material_mass_per_component_kg entries for this component.",
+    "massBalanceErrorHint": "Material masses must add up to component_mass_kg. Differences above {{tolerance}}% are blocked to avoid incorrect PCI results.",
+    "massBalanceWarningTitle": "Mass balance warning (within tolerance)",
+    "massBalanceWarningItem": "Component {{component}}: materials sum to {{materials}} vs component_mass_kg {{declared}} (Δ {{diff}}). The gap is within {{tolerance}}% but should be corrected if possible.",
+    "optionalField": "Optional",
     "apply": "Apply mapping",
     "noRows": "No BoM rows loaded yet. Upload or load a sample first."
   },
   "parameters": {
     "title": "Step 3 – Parameters",
-    "subtitle": "Use defaults or override per material. Placeholder values will be replaced later.",
-    "productionWaste": "Production waste fraction",
-    "materialTableTitle": "Material parameters",
-    "materialTableHint": "Defaults are placeholders; adjust as needed.",
-    "placeholderNote": "Implements Bracquene et al. (2020) PCI logic; placeholders should be validated (DOI:10.1016/j.resconrec.2020.104886).",
-    "componentUseFactors": "Component use factors (I, L, I_d,c, L_d,c)",
-    "materialRowHelper": "Edit F_u, F_r, C_u, C_r, C_cp, C_fp, E_fp, E_cp, E_ms, E_rfp (0-1).",
-    "noProduct": "Please finish mapping first."
+    "subtitle": "Choose the level for each parameter, then fill it once. Values inherit down the hierarchy to avoid duplicate work.",
+    "levelSelectionTitle": "Where do you want to set each parameter?",
+    "levelSelectionHint": "Product-level values apply to all components and materials; component-level values cascade to materials. Switch levels only when you need more detail.",
+    "componentUseFactors": "Parameters set at component level (cascading to materials).",
+    "materialRowHelper": "Parameters shown here are set to material level. Others are inherited from component or product levels.",
+    "inheritanceHint": "These values cascade to all components and materials unless overridden at lower levels.",
+    "sourceTooltip": "Add source/reference (placeholder)",
+    "noProduct": "Please finish mapping first.",
+    "levels": {
+      "product": "Product level",
+      "component": "Component level",
+      "material": "Material level"
+    },
+    "labels": {
+      "mass": "M – Mass",
+      "fu": "F_u – Fraction of reused components",
+      "fr": "F_r – Fraction of recycled content of the produced feedstock",
+      "cu": "C_u – Fraction of product at end of use collected for reuse of component",
+      "cr": "C_r – Fraction of product at end of use collected for material recycling",
+      "ccp": "C_cp – Fraction of material losses recovered as scrap during component production",
+      "cfp": "C_fp – Fraction of material losses recovered as scrap during feedstock production",
+      "efp": "E_fp – Efficiency of feedstock production",
+      "ecp": "E_cp – Efficiency of component production",
+      "ems": "E_ms – Efficiency of material separation process",
+      "erfp": "E_rfp – Efficiency of recycled feedstock production",
+      "intensity": "I – Use intensity during use phase",
+      "intensityDesign": "I_d – Assumed use intensity during design stage based on average consumer behavior",
+      "lifetime": "L – Period of time product is in use (years)",
+      "lifetimeDesign": "L_d – Design life of a product (years) based on average market expectation"
+    }
   },
   "results": {
     "title": "Step 4 – Results",
@@ -113,15 +143,16 @@
   "fields": {
     "productName": "Product name",
     "component": "Component",
-    "componentName": "Component name",
-    "componentQuantity": "Component quantity",
-    "componentMass": "Component mass (kg)",
+    "componentId": "component_id",
+    "componentName": "component_name",
+    "componentQuantity": "component_quantity",
+    "componentMass": "component_mass_kg",
     "material": "Material",
-    "materialName": "Material name",
-    "materialQuantity": "Material quantity",
-    "materialUnit": "Material unit",
-    "materialMass": "Material mass",
-    "recycledContent": "Recycled content (0-1)",
-    "recyclability": "Recyclability (0-1)"
+    "materialType": "material_type",
+    "materialMassPerComponent": "material_mass_per_component_kg",
+    "materialName": "material_name",
+    "materialQuantity": "material_quantity",
+    "materialUnit": "material_unit",
+    "materialMass": "material_mass"
   }
 }

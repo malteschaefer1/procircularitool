@@ -1,6 +1,6 @@
-import { Group, SegmentedControl, Text, Title, Tooltip } from '@mantine/core';
+import { Anchor, Group, SegmentedControl, Text, Title, Tooltip } from '@mantine/core';
 import { IconContrast, IconMoonStars, IconSun } from '@tabler/icons-react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useThemeMode } from '../../theme/ThemeProvider';
 import { ThemeMode } from '../../theme/theme';
 
@@ -17,7 +17,26 @@ const HeaderBar = ({ onReset }: HeaderBarProps) => {
       <div>
         <Title order={2}>{t('app.title')}</Title>
         <Text size="sm" c="dimmed">
-          {t('app.tagline')}
+          <Trans
+            i18nKey="app.tagline"
+            components={{
+              0: (
+                <Anchor
+                  href="https://doi.org/10.1016/j.resconrec.2019.104608"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              ),
+            }}
+          />
+        </Text>
+        <Text size="sm">
+          <Trans
+            i18nKey="app.contact"
+            components={{
+              0: <Anchor href="mailto:mschaefer@uni-wuppertal.de" />,
+            }}
+          />
         </Text>
         <Text size="xs" c="blue" onClick={onReset} style={{ cursor: 'pointer' }}>
           {t('app.reset')}

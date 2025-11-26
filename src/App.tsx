@@ -23,9 +23,9 @@ const App = () => {
   const canProceedFromParameters = Boolean(calculationResult);
 
   return (
-    <AppShell padding="md" header={{ height: 82 }}>
+    <AppShell padding="md" header={{ height: 140 }}>
       <AppShell.Header>
-        <Container size="xl" py="sm">
+        <Container size="xl" py="md">
           <HeaderBar onReset={() => reset()} />
         </Container>
       </AppShell.Header>

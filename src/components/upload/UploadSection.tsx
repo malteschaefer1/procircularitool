@@ -6,7 +6,6 @@ import {
   FileInput,
   Group,
   NumberInput,
-  Select,
   Stack,
   Table,
   Text,
@@ -19,25 +18,37 @@ import { washingMachineSample, guardLockSwitchSample } from '../../data/sampleBo
 import { parseBomFile } from '../../core/parsers';
 import { RawBomRow } from '../../core/types';
 import { useAppStore } from '../../store/useAppStore';
+import { defaultParameterLevels } from '../../data/defaultParameters';
 
 interface UploadSectionProps {
   onProceed: () => void;
 }
 
-const columnsForPreview = ['component', 'component_quantity', 'component_mass_kg', 'material', 'material_quantity', 'material_unit', 'recycled_content', 'recyclability'];
+const deriveProductName = (file: File | null) => {
+  if (!file?.name) return 'Custom product';
+  const withoutExt = file.name.replace(/\.[^.]+$/, '');
+  return withoutExt || 'Custom product';
+};
+
+const columnsForPreview = [
+  'component_id',
+  'component_name',
+  'component_mass_kg',
+  'component_quantity',
+  'material_type',
+  'material_mass_per_component_kg',
+];
 
 const ManualEntryTable = ({ onSave }: { onSave: (rows: RawBomRow[]) => void }) => {
   const { t } = useTranslation();
   const [manualRows, setManualRows] = useState<RawBomRow[]>([
     {
-      component: 'Custom component',
+      component_id: 'component-1',
+      component_name: 'Custom component',
       component_quantity: 1,
       component_mass_kg: 1,
-      material: 'Custom material',
-      material_quantity: 1,
-      material_unit: 'kg',
-      recycled_content: 0.1,
-      recyclability: 0.5,
+      material_type: 'Custom material',
+      material_mass_per_component_kg: 1,
     },
   ]);
 
@@ -49,13 +60,12 @@ const ManualEntryTable = ({ onSave }: { onSave: (rows: RawBomRow[]) => void }) =
     setManualRows((rows) => [
       ...rows,
       {
-        component: `Component ${rows.length + 1}`,
+        component_id: `component-${rows.length + 1}`,
+        component_name: `Component ${rows.length + 1}`,
         component_quantity: 1,
-        material: `Material ${rows.length + 1}`,
-        material_quantity: 1,
-        material_unit: 'kg',
-        recycled_content: 0.05,
-        recyclability: 0.5,
+        component_mass_kg: 1,
+        material_type: `Material ${rows.length + 1}`,
+        material_mass_per_component_kg: 1,
       },
     ]);
   };
@@ -77,9 +87,9 @@ const ManualEntryTable = ({ onSave }: { onSave: (rows: RawBomRow[]) => void }) =
         {manualRows.map((row, index) => (
           <Group key={`manual-row-${index}`} align="flex-end" wrap="wrap" gap="xs">
             <TextInput
-              label={t('fields.component')}
-              value={(row.component as string) || ''}
-              onChange={(event) => updateRow(index, 'component', event.currentTarget.value)}
+              label={t('fields.componentId')}
+              value={(row.component_id as string) || ''}
+              onChange={(event) => updateRow(index, 'component_id', event.currentTarget.value)}
             />
             <NumberInput
               label={t('fields.componentQuantity')}
@@ -87,6 +97,11 @@ const ManualEntryTable = ({ onSave }: { onSave: (rows: RawBomRow[]) => void }) =
               min={0}
               step={1}
               onChange={(value) => updateRow(index, 'component_quantity', Number(value ?? 1))}
+            />
+            <TextInput
+              label={t('fields.componentName')}
+              value={(row.component_name as string) || ''}
+              onChange={(event) => updateRow(index, 'component_name', event.currentTarget.value)}
             />
             <NumberInput
               label={t('fields.componentMass')}
@@ -96,38 +111,16 @@ const ManualEntryTable = ({ onSave }: { onSave: (rows: RawBomRow[]) => void }) =
               onChange={(value) => updateRow(index, 'component_mass_kg', Number(value ?? 0))}
             />
             <TextInput
-              label={t('fields.material')}
-              value={(row.material as string) || ''}
-              onChange={(event) => updateRow(index, 'material', event.currentTarget.value)}
+              label={t('fields.materialType')}
+              value={(row.material_type as string) || ''}
+              onChange={(event) => updateRow(index, 'material_type', event.currentTarget.value)}
             />
             <NumberInput
-              label={t('fields.materialQuantity')}
-              value={Number(row.material_quantity) || 0}
+              label={t('fields.materialMassPerComponent')}
+              value={Number(row.material_mass_per_component_kg) || 0}
               min={0}
               step={0.1}
-              onChange={(value) => updateRow(index, 'material_quantity', Number(value ?? 0))}
-            />
-            <Select
-              label={t('fields.materialUnit')}
-              data={['kg', 'g', 'pcs']}
-              value={(row.material_unit as string) || 'kg'}
-              onChange={(value) => updateRow(index, 'material_unit', value || 'kg')}
-            />
-            <NumberInput
-              label={t('fields.recycledContent')}
-              value={Number(row.recycled_content) || 0}
-              min={0}
-              max={1}
-              step={0.05}
-              onChange={(value) => updateRow(index, 'recycled_content', Number(value ?? 0))}
-            />
-            <NumberInput
-              label={t('fields.recyclability')}
-              value={Number(row.recyclability) || 0}
-              min={0}
-              max={1}
-              step={0.05}
-              onChange={(value) => updateRow(index, 'recyclability', Number(value ?? 0))}
+              onChange={(value) => updateRow(index, 'material_mass_per_component_kg', Number(value ?? 0))}
             />
           </Group>
         ))}
@@ -145,7 +138,15 @@ const UploadSection = ({ onProceed }: UploadSectionProps) => {
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { setRawRows, setMapping, setProduct, setCalculationResult } = useAppStore();
+  const {
+    setRawRows,
+    setMapping,
+    setProduct,
+    setCalculationResult,
+    setProductName,
+    setMassBalanceWarnings,
+    setParameterLevels,
+  } = useAppStore();
 
   const previewRows = (rows: RawBomRow[]) => rows.slice(0, 5);
 
@@ -157,6 +158,9 @@ const UploadSection = ({ onProceed }: UploadSectionProps) => {
       setMapping(null);
       setProduct(null);
       setCalculationResult(null);
+      setMassBalanceWarnings([]);
+      setParameterLevels({ ...defaultParameterLevels });
+      setProductName(deriveProductName(selectedFile));
       setError(null);
       onProceed();
     } catch (err) {
@@ -164,11 +168,14 @@ const UploadSection = ({ onProceed }: UploadSectionProps) => {
     }
   };
 
-  const loadSample = (rows: RawBomRow[]) => {
+  const loadSample = (rows: RawBomRow[], name: string) => {
     setRawRows(rows);
     setMapping(null);
     setProduct(null);
     setCalculationResult(null);
+    setMassBalanceWarnings([]);
+    setParameterLevels({ ...defaultParameterLevels });
+    setProductName(name);
     onProceed();
   };
 
@@ -189,14 +196,14 @@ const UploadSection = ({ onProceed }: UploadSectionProps) => {
             <Button
               variant="light"
               data-testid="load-sample-wash"
-              onClick={() => loadSample(washingMachineSample)}
+              onClick={() => loadSample(washingMachineSample, 'Washing machine')}
             >
               {t('upload.washingMachine')}
             </Button>
             <Button
               variant="light"
               data-testid="load-sample-guard"
-              onClick={() => loadSample(guardLockSwitchSample)}
+              onClick={() => loadSample(guardLockSwitchSample, 'Guard lock switch')}
             >
               {t('upload.guardLock')}
             </Button>
@@ -225,7 +232,7 @@ const UploadSection = ({ onProceed }: UploadSectionProps) => {
         )}
       </Card>
 
-      <ManualEntryTable onSave={(rows) => loadSample(rows)} />
+      <ManualEntryTable onSave={(rows) => loadSample(rows, 'Custom product')} />
 
       {hasRows && (
         <Card withBorder shadow="xs">
@@ -244,9 +251,10 @@ const UploadSection = ({ onProceed }: UploadSectionProps) => {
             <Table.Tbody>
               {previewRows(rawRows).map((row, rowIndex) => (
                 <Table.Tr key={`preview-${rowIndex}`}>
-                  {columnsForPreview.map((col) => (
-                    <Table.Td key={`${rowIndex}-${col}`}>{(row as Record<string, unknown>)[col] as string}</Table.Td>
-                  ))}
+                  {columnsForPreview.map((col) => {
+                    const value = (row as Record<string, unknown>)[col];
+                    return <Table.Td key={`${rowIndex}-${col}`}>{value ?? '–'}</Table.Td>;
+                  })}
                 </Table.Tr>
               ))}
             </Table.Tbody>

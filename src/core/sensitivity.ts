@@ -18,19 +18,19 @@ export const runSensitivityAnalysis = (input: CalculationInput): SensitivityResu
       (c) => c.componentId === component.componentId,
     );
     if (targetComponent) {
-      targetComponent.componentParameters = {
-        ...targetComponent.componentParameters,
-        intensity: decreasedIntensity,
-      };
-      const result = calculatePci(decreasedInput);
-      levers.push({
-        id: `${component.componentId}-intensity`,
-        label: `${component.componentName}: intensity`,
-        baselineValue: baseIntensity,
-        changedValue: decreasedIntensity,
-        baselinePci: baseline.pciOverall,
-        newPci: result.pciOverall,
-        delta: result.pciOverall - baseline.pciOverall,
+        targetComponent.componentParameters = {
+          ...targetComponent.componentParameters,
+          intensity: decreasedIntensity,
+        };
+        const result = calculatePci(decreasedInput);
+        levers.push({
+          id: `${component.componentId}-intensity`,
+          label: `${component.componentName}: I – Use intensity during use phase`,
+          baselineValue: baseIntensity,
+          changedValue: decreasedIntensity,
+          baselinePci: baseline.pciOverall,
+          newPci: result.pciOverall,
+          delta: result.pciOverall - baseline.pciOverall,
         direction: 'decrease',
       });
     }
@@ -55,7 +55,7 @@ export const runSensitivityAnalysis = (input: CalculationInput): SensitivityResu
         const result = calculatePci(modifiedInput);
         levers.push({
           id: `${material.materialId}-fr`,
-          label: `${component.componentName}: ${material.materialName} F_r`,
+          label: `${component.componentName}: ${material.materialName} F_r – Fraction of recycled content of the produced feedstock`,
           baselineValue: baseFr,
           changedValue: increasedFr,
           baselinePci: baseline.pciOverall,
@@ -80,7 +80,7 @@ export const runSensitivityAnalysis = (input: CalculationInput): SensitivityResu
         const result = calculatePci(modifiedEmsInput);
         levers.push({
           id: `${material.materialId}-ems`,
-          label: `${component.componentName}: ${material.materialName} E_ms`,
+          label: `${component.componentName}: ${material.materialName} E_ms – Efficiency of material separation process`,
           baselineValue: baseEms,
           changedValue: increasedEms,
           baselinePci: baseline.pciOverall,

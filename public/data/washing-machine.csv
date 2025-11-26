@@ -1,10 +1,10 @@
-component,component_quantity,component_mass_kg,material,material_quantity,material_unit,recycled_content,recyclability
-Drum assembly,1,28,Stainless steel,20,kg,0.35,0.9
-Drum assembly,1,28,Carbon steel counterweight,5,kg,0.2,0.85
-Cabinet,1,15,Carbon steel,10,kg,0.25,0.85
-Cabinet,1,15,PP polymer,3.5,kg,0.1,0.65
-Electronics module,1,4,Electronics,1.2,kg,0.04,0.35
-Electronics module,1,4,Copper wiring,0.5,kg,0.4,0.9
-Electronics module,1,4,ABS plastic,1,kg,0.05,0.45
-Water handling,1,6,Rubber hoses,1.2,kg,0.05,0.3
-Water handling,1,6,Stainless steel fasteners,0.6,kg,0.35,0.92
+component_id,component_name,component_mass_kg,component_quantity,material_type,material_mass_per_component_kg
+drum-assembly,Drum assembly,28,1,Stainless steel,20
+drum-assembly,Drum assembly,28,1,Carbon steel counterweight,8
+cabinet,Cabinet,15,1,Carbon steel,11.5
+cabinet,Cabinet,15,1,PP polymer,3.5
+electronics-module,Electronics module,4,1,Electronics,1.6
+electronics-module,Electronics module,4,1,Copper wiring,0.7
+electronics-module,Electronics module,4,1,ABS plastic,1.7
+water-handling,Water handling,6,1,Rubber hoses,4
+water-handling,Water handling,6,1,Stainless steel fasteners,2

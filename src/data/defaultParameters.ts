@@ -1,4 +1,4 @@
-import { ComponentParameters, MaterialParameters, ProductParameters } from '../core/types';
+import { ComponentParameters, MaterialParameters, ParameterLevelMap, ProductParameters } from '../core/types';
 
 export const defaultProductParameters: ProductParameters = {
   productionWasteFraction: 0.05,
@@ -7,6 +7,15 @@ export const defaultProductParameters: ProductParameters = {
   lifetime: 1,
   intensityReference: 1,
   lifetimeReference: 1,
+  cu: 0.05,
+  cr: 0.6,
+  fu: 0.9,
+  fr: 0.2,
+  ccp: 0.05,
+  e_cp: 0.9,
+  e_fp: 0.9,
+  e_ms: 0.9,
+  e_rfp: 0.9,
   // TODO: Replace placeholder defaults with values grounded in Bracquene et al. (2020) once available.
 };
 
@@ -16,6 +25,15 @@ export const defaultComponentParameters: ComponentParameters = {
   lifetime: 1,
   intensityReference: 1,
   lifetimeReference: 1,
+  cu: 0.05,
+  cr: 0.6,
+  fu: 0.9,
+  fr: 0.2,
+  ccp: 0.05,
+  e_cp: 0.9,
+  e_fp: 0.9,
+  e_ms: 0.9,
+  e_rfp: 0.9,
 };
 
 const materialDefaults = (overrides: Partial<MaterialParameters> = {}): MaterialParameters => ({
@@ -48,3 +66,19 @@ export const defaultMaterialParameters: Record<string, MaterialParameters> = {
   default: materialDefaults(),
   // TODO: Expand this catalog with vetted values and references once domain data is available (Bracquene et al. 2020 DOI:10.1016/j.resconrec.2020.104886).
 };
+
+export const defaultParameterLevels: ParameterLevelMap = {
+  intensity: 'product',
+  intensityReference: 'product',
+  lifetime: 'product',
+  lifetimeReference: 'product',
+  cu: 'product',
+  cr: 'product',
+  ccp: 'component',
+  e_cp: 'component',
+  fu: 'component',
+  fr: 'component',
+  e_fp: 'material',
+  e_ms: 'material',
+  e_rfp: 'material',
+} as const;

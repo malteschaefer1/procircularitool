@@ -27,6 +27,7 @@ interface WhatIfPanelProps {
 const WhatIfPanel = ({ baselineResult, leverTableRef }: WhatIfPanelProps) => {
   const { t } = useTranslation();
   const product = useAppStore((state) => state.product);
+  const parameterLevels = useAppStore((state) => state.parameterLevels);
   const [wasteFraction, setWasteFraction] = useState(
     product?.productParameters?.productionWasteFraction ?? 0.05,
   );
@@ -41,13 +42,14 @@ const WhatIfPanel = ({ baselineResult, leverTableRef }: WhatIfPanelProps) => {
           productionWasteFraction: wasteFraction,
         },
       },
+      parameterLevels,
     });
-  }, [product, wasteFraction]);
+  }, [product, wasteFraction, parameterLevels]);
 
   const sensitivity = useMemo(() => {
     if (!product) return null;
-    return runSensitivityAnalysis({ product });
-  }, [product]);
+    return runSensitivityAnalysis({ product, parameterLevels });
+  }, [product, parameterLevels]);
 
   if (!product || !baselineResult) {
     return (

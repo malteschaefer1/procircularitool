@@ -8,6 +8,15 @@ export interface ProductParameters {
   lifetime?: number;
   intensityReference?: number;
   lifetimeReference?: number;
+  cu?: number;
+  cr?: number;
+  fu?: number;
+  fr?: number;
+  ccp?: number;
+  e_cp?: number;
+  e_fp?: number;
+  e_ms?: number;
+  e_rfp?: number;
 }
 
 export interface ComponentParameters {
@@ -17,6 +26,15 @@ export interface ComponentParameters {
   lifetime?: number;
   intensityReference?: number;
   lifetimeReference?: number;
+  cu?: number;
+  cr?: number;
+  fu?: number;
+  fr?: number;
+  ccp?: number;
+  e_cp?: number;
+  e_fp?: number;
+  e_ms?: number;
+  e_rfp?: number;
 }
 
 export interface MaterialParameters {
@@ -49,6 +67,8 @@ export interface Component {
   quantity: number;
   massPerUnitKg?: number;
   totalMassKg?: number;
+  declaredMassKg?: number;
+  materialMassSumKg?: number;
   materials: Material[];
   componentParameters?: ComponentParameters;
 }
@@ -62,6 +82,7 @@ export interface Product {
 
 export interface CalculationInput {
   product: Product;
+  parameterLevels?: ParameterLevelMap;
 }
 
 export interface CalculationResult {
@@ -97,14 +118,38 @@ export interface SensitivityResult {
 export type RawBomRow = Record<string, string | number | undefined>;
 
 export interface ColumnMapping {
+  componentId?: string;
   componentName: string;
   componentQuantity?: string;
   componentMass?: string;
-  materialName: string;
-  materialQuantity?: string;
-  materialUnit?: string;
-  materialMass?: string;
-  recycledContent?: string;
-  recyclability?: string;
+  materialType: string;
+  materialMassPerComponent?: string;
   density?: string;
 }
+
+export interface MassBalanceIssue {
+  componentId: string;
+  componentName: string;
+  declaredMassKg?: number;
+  materialMassKg: number;
+  differenceKg: number;
+}
+
+export type ParameterLevel = 'product' | 'component' | 'material';
+
+export type ParameterKey =
+  | 'intensity'
+  | 'intensityReference'
+  | 'lifetime'
+  | 'lifetimeReference'
+  | 'cu'
+  | 'cr'
+  | 'fu'
+  | 'fr'
+  | 'ccp'
+  | 'e_cp'
+  | 'e_fp'
+  | 'e_ms'
+  | 'e_rfp';
+
+export type ParameterLevelMap = Record<ParameterKey, ParameterLevel>;

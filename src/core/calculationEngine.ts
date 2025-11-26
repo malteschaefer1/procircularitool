@@ -1,5 +1,42 @@
-import { CalculationInput, CalculationResult } from './types';
+import { CalculationInput, CalculationResult, ParameterKey } from './types';
 import { convertToKg } from './units';
+import { defaultMaterialParameters, defaultParameterLevels } from '../data/defaultParameters';
+
+const hardFallbacks: Partial<Record<ParameterKey, number>> = {
+  intensity: 1,
+  intensityReference: 1,
+  lifetime: 1,
+  lifetimeReference: 1,
+  e_fp: 1,
+  e_cp: 1,
+  e_ms: 1,
+  e_rfp: 1,
+};
+
+const resolveParam = (
+  key: ParameterKey,
+  input: CalculationInput,
+  componentIndex: number,
+  materialIndex?: number,
+): number => {
+  const component = input.product.components[componentIndex];
+  const material = materialIndex !== undefined ? component.materials[materialIndex] : undefined;
+  const level = input.parameterLevels?.[key] ?? defaultParameterLevels[key];
+  const productParams = input.product.productParameters ?? {};
+  const componentParams = component.componentParameters ?? {};
+  const materialParams = material?.materialParameters ?? {};
+  const defaults =
+    defaultMaterialParameters[material?.materialName.toLowerCase() ?? ''] ?? defaultMaterialParameters.default;
+  const productValue = (productParams as Record<string, number | undefined>)[key];
+  const componentValue = (componentParams as Record<string, number | undefined>)[key];
+  const materialValue = (materialParams as Record<string, number | undefined>)[key];
+  const defaultValue =
+    (defaults as Record<string, number | undefined>)[key] ?? hardFallbacks[key] ?? 0;
+
+  if (level === 'product') return productValue ?? defaultValue;
+  if (level === 'component') return componentValue ?? productValue ?? defaultValue;
+  return materialValue ?? componentValue ?? productValue ?? defaultValue;
+};
 
 const clamp = (value: number, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 const safeDivide = (num: number, den: number) => (den === 0 ? 0 : num / den);
@@ -16,6 +53,7 @@ export const calculatePci = (input: CalculationInput): CalculationResult => {
   const componentLfi: Array<{ componentId: string; componentName: string; lfi: number }> = [];
 
   const pciByComponent = input.product.components.map((component) => {
+    const componentIndex = input.product.components.indexOf(component);
     const componentMassKg =
       component.totalMassKg ||
       component.materials.reduce((sum, material) => {
@@ -25,12 +63,10 @@ export const calculatePci = (input: CalculationInput): CalculationResult => {
 
     totalProductMassKg += componentMassKg;
 
-    const {
-      intensity = 1,
-      lifetime = 1,
-      intensityReference = 1,
-      lifetimeReference = 1,
-    } = component.componentParameters || {};
+    const intensity = resolveParam('intensity', input, componentIndex);
+    const lifetime = resolveParam('lifetime', input, componentIndex);
+    const intensityReference = resolveParam('intensityReference', input, componentIndex);
+    const lifetimeReference = resolveParam('lifetimeReference', input, componentIndex);
     const X_c = safeDivide(intensity * lifetime, intensityReference * lifetimeReference) || 1;
 
     let compPciNumerator = 0;
@@ -38,19 +74,18 @@ export const calculatePci = (input: CalculationInput): CalculationResult => {
     let compLfiNumerator = 0;
     let compLfiMass = 0;
 
-    component.materials.forEach((material) => {
+    component.materials.forEach((material, materialIndex) => {
       const mass = material.massKg ?? convertToKg(material.quantity, material.unit) ?? 0;
-      const params = material.materialParameters || {};
-      const fu = params.fu ?? 1;
-      const fr = params.fr ?? 0;
-      const cu = params.cu ?? 0;
-      const cr = params.cr ?? 0;
-      const ccp = params.ccp ?? 0;
-      const cfp = params.cfp ?? 0;
-      const e_fp = params.e_fp ?? 1;
-      const e_cp = params.e_cp ?? 1;
-      const e_ms = params.e_ms ?? 1;
-      const e_rfp = params.e_rfp ?? 1;
+      const fu = resolveParam('fu', input, componentIndex, materialIndex);
+      const fr = resolveParam('fr', input, componentIndex, materialIndex);
+      const cu = resolveParam('cu', input, componentIndex, materialIndex);
+      const cr = resolveParam('cr', input, componentIndex, materialIndex);
+      const ccp = resolveParam('ccp', input, componentIndex, materialIndex);
+      const cfp = material.materialParameters?.cfp ?? 0;
+      const e_fp = resolveParam('e_fp', input, componentIndex, materialIndex);
+      const e_cp = resolveParam('e_cp', input, componentIndex, materialIndex);
+      const e_ms = resolveParam('e_ms', input, componentIndex, materialIndex);
+      const e_rfp = resolveParam('e_rfp', input, componentIndex, materialIndex);
 
       // Linear reference masses
       const vLinear = safeDivide(mass, e_cp * e_fp);
@@ -119,27 +154,25 @@ export const calculatePci = (input: CalculationInput): CalculationResult => {
   > = {};
 
   input.product.components.forEach((component) => {
-    const {
-      intensity = 1,
-      lifetime = 1,
-      intensityReference = 1,
-      lifetimeReference = 1,
-    } = component.componentParameters || {};
+    const componentIndex = input.product.components.indexOf(component);
+    const intensity = resolveParam('intensity', input, componentIndex);
+    const lifetime = resolveParam('lifetime', input, componentIndex);
+    const intensityReference = resolveParam('intensityReference', input, componentIndex);
+    const lifetimeReference = resolveParam('lifetimeReference', input, componentIndex);
     const X_c = safeDivide(intensity * lifetime, intensityReference * lifetimeReference) || 1;
 
-    component.materials.forEach((material) => {
+    component.materials.forEach((material, materialIndex) => {
       const mass = material.massKg ?? convertToKg(material.quantity, material.unit) ?? 0;
-      const params = material.materialParameters || {};
-      const fu = params.fu ?? 1;
-      const fr = params.fr ?? 0;
-      const cu = params.cu ?? 0;
-      const cr = params.cr ?? 0;
-      const ccp = params.ccp ?? 0;
-      const cfp = params.cfp ?? 0;
-      const e_fp = params.e_fp ?? 1;
-      const e_cp = params.e_cp ?? 1;
-      const e_ms = params.e_ms ?? 1;
-      const e_rfp = params.e_rfp ?? 1;
+      const fu = resolveParam('fu', input, componentIndex, materialIndex);
+      const fr = resolveParam('fr', input, componentIndex, materialIndex);
+      const cu = resolveParam('cu', input, componentIndex, materialIndex);
+      const cr = resolveParam('cr', input, componentIndex, materialIndex);
+      const ccp = resolveParam('ccp', input, componentIndex, materialIndex);
+      const cfp = material.materialParameters?.cfp ?? 0;
+      const e_fp = resolveParam('e_fp', input, componentIndex, materialIndex);
+      const e_cp = resolveParam('e_cp', input, componentIndex, materialIndex);
+      const e_ms = resolveParam('e_ms', input, componentIndex, materialIndex);
+      const e_rfp = resolveParam('e_rfp', input, componentIndex, materialIndex);
 
       const vLinear = safeDivide(mass, e_cp * e_fp);
       const W_fp_cm = safeDivide((1 - fu) * (1 - e_fp) * (1 - cfp) * mass, e_fp * e_cp);
