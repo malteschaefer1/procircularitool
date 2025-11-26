@@ -1,10 +1,17 @@
 site_name: ProCirculariTool Documentation
+docs_dir: ../docs
 nav:
   - Home: index.md
   - User Guide: user-guide.md
   - Developer Guide: developer-guide.md
   - Calculation Logic: calculation-logic.md
   - Roadmap: roadmap.md
+  - Meta:
+      - Architecture: meta/architecture.md
+      - Project Status: meta/project-status.md
+      - Contributing: meta/contributing.md
+      - GPT Usage Guide: meta/gpt-usage-guide.md
+      - Documentation Plan: meta/documentation-plan.md
 theme:
   name: material
   language: en

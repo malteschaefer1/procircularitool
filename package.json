@@ -10,15 +10,15 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "e2e": "playwright test",
-    "e2e:headed": "playwright test --headed",
+    "test": "vitest run --config config/vite.config.ts",
+    "test:watch": "vitest --config config/vite.config.ts",
+    "test:coverage": "vitest run --coverage --config config/vite.config.ts",
+    "e2e": "playwright test --config config/playwright.config.ts",
+    "e2e:headed": "playwright test --headed --config config/playwright.config.ts",
     "check": "npm run lint && npm run test && npm run build",
     "typecheck": "tsc --noEmit",
-    "docs:serve": "mkdocs serve",
-    "docs:build": "mkdocs build"
+    "docs:serve": "mkdocs serve -f config/mkdocs.yml",
+    "docs:build": "mkdocs build -f config/mkdocs.yml"
   },
   "repository": {
     "type": "git",

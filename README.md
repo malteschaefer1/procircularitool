@@ -5,6 +5,7 @@ A browser-based Product Circularity Index (PCI) explorer for sustainability and 
 ## Features
 - CSV/XLSX upload (parsed locally with PapaParse + ExcelJS), manual entry, and two sample BoMs (washing machine, guard lock switch)
 - Column mapping UI to align arbitrary headers with the canonical schema
+- Parameter inheritance: pick the level (product/component/material) for each input once; values cascade to avoid duplicate entry
 - Placeholder calculation engine with component/material breakdowns, totals, and notes
 - What-if sliders and sensitivity analysis (±10% levers) with gauges and bar charts
 - Light, dark, and high-contrast themes; bilingual UI (English/German)
@@ -26,27 +27,36 @@ Open the printed local URL (usually http://localhost:5173).
 - `npm run preview` – preview the production build
 - `npm run lint` – ESLint
 - `npm run format` – Prettier write
-- `npm run test` – Vitest unit tests
+- `npm run test` – Vitest unit tests (uses `config/vite.config.ts`)
 - `npm run test:coverage` – Vitest coverage
-- `npm run e2e` – Playwright E2E (starts dev server)
-- `npm run docs:serve` / `npm run docs:build` – MkDocs site
+- `npm run e2e` – Playwright E2E (uses `config/playwright.config.ts`)
+- `npm run docs:serve` / `npm run docs:build` – MkDocs site (config in `config/mkdocs.yml`)
 
 ## Documentation
-MkDocs with the Material theme lives in `docs/`.
+MkDocs with the Material theme lives in `docs/`. Repo/process docs sit under `docs/meta/` (architecture, status, contributing, GPT usage). A Read the Docs config is included (`.readthedocs.yaml`).
 
 ```bash
 # install python tooling
-pip install mkdocs-material
+pip install -r docs/requirements.txt
 
 # live reload docs
-mkdocs serve
+mkdocs serve -f config/mkdocs.yml
 
 # static site
-mkdocs build
+mkdocs build -f config/mkdocs.yml
 ```
 
 ## Project layout
 ```
+config/
+  eslint.config.js        # lint config
+  prettier.config.cjs     # formatter config
+  vite.config.ts          # Vite/Vitest config + aliases
+  vitest.setup.ts         # Vitest setup
+  playwright.config.ts    # E2E config
+  tsconfig.base.json      # base TS settings (root tsconfig extends this)
+  tsconfig.node.json      # TS settings for configs
+  mkdocs.yml              # docs site config
 src/
   core/          # types, units, parsers, mapping helpers, placeholder calc + sensitivity
   components/    # upload, mapping, parameters, results, what-if, export, layout
@@ -56,6 +66,9 @@ src/
   store/         # Zustand state
 public/data/     # sample BoM CSVs
 literature/      # reference papers (kept intact)
+docs/
+  *.md           # user/developer docs
+  meta/          # repo/process docs (architecture, status, contributing, GPT usage)
 ```
 
 ## License

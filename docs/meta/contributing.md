@@ -23,4 +23,4 @@ npm run dev
 ## Pull requests
 - Describe the problem and solution clearly.
 - Note any TODOs or placeholders added.
-- Update `PROJECT_STATUS.md` (and docs) if behavior or scope changes.
+- Update `meta/project-status.md` (and docs) if behavior or scope changes.

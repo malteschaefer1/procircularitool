@@ -1,9 +1,3 @@
 {
-  "compilerOptions": {
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "noEmit": true
-  },
-  "include": ["vite.config.ts", "playwright.config.ts"]
+  "extends": "./config/tsconfig.node.json"
 }

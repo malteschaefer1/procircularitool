@@ -17,6 +17,7 @@
 
 ## Folder structure
 ```
+config/          // tooling configs (Vite/Vitest, Playwright, TS, lint/format, MkDocs)
 src/
   core/          // types, units, parser & mapping helpers, placeholder calculations, sensitivity
   components/    // UI sections: upload, mapping, parameters, results, what-if, export, layout
@@ -25,6 +26,7 @@ src/
   theme/         // Mantine theme definitions + provider
   store/         // Zustand store for shared state
 public/data/     // downloadable sample CSVs
+docs/meta/       // repo/process docs (architecture, status, contributing, GPT usage)
 ```
 
 ## State management

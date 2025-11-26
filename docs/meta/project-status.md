@@ -6,6 +6,7 @@
 - EN/DE i18n via react-i18next
 - CSV/XLSX parsing, manual entry, sample BoMs
 - Column mapping to canonical schema
+- Parameter-level selection (product/component/material) with inheritance to reduce duplicate entry
 - Placeholder calculation engine + sensitivity (TODO: replace with Bracquene et al.)
 - Results dashboard with charts, what-if slider, exports (CSV/PNG/PDF)
 - Docs (MkDocs skeleton) and repo meta files

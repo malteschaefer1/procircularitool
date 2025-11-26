@@ -3,7 +3,7 @@
 Use this guide to collaborate with ChatGPT/Codex effectively on ProCirculariTool.
 
 ## Before asking for help
-- Skim `ARCHITECTURE.md`, `ROADMAP.md`, and `PROJECT_STATUS.md` to align on current shape and priorities.
+- Skim `meta/architecture.md`, `meta/project-status.md`, and `roadmap.md` (in `docs/`) to align on current shape and priorities.
 - Gather the relevant files or excerpts (components, core logic, tests) and share concise snippets in your prompt.
 
 ## Good prompt patterns
@@ -20,5 +20,5 @@ Use this guide to collaborate with ChatGPT/Codex effectively on ProCirculariTool
 1. Explain current behavior and desired outcome, plus any constraints (performance, privacy, UX).
 2. Provide file paths and the specific blocks to change; include current code if small enough.
 3. After AI-assisted edits, run `npm run lint`, `npm run test`, and, if relevant, `npm run e2e`.
-4. Update `PROJECT_STATUS.md` (and `ROADMAP.md`/`ARCHITECTURE.md` if needed) after significant changes.
+4. Update `meta/project-status.md` (and `roadmap.md`/`meta/architecture.md` if needed) after significant changes.
 5. Keep privacy constraints in mind: BoM data must remain client-side; avoid adding network calls.

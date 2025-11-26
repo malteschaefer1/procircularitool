@@ -13,6 +13,7 @@
 
 ## Project layout
 ```
+config/        # Vite/Vitest, Playwright, TS, lint/format, MkDocs configs
 src/
   core/         // canonical types, parsers, placeholder calc engine, sensitivity
   components/   // UI building blocks (upload, mapping, parameters, results, what-if, export)
@@ -21,15 +22,17 @@ src/
   theme/        // Mantine theme modes (light/dark/high-contrast)
   store/        // Zustand store
 public/data/    // sample CSVs
+docs/meta/      // repo/process docs (architecture, project status, contributing, GPT usage)
 ```
 
 ## Scripts
 - `npm run dev` – start Vite dev server
 - `npm run build` – type-check + production build
 - `npm run lint` / `npm run format`
-- `npm run test` / `npm run test:coverage`
-- `npm run e2e` – Playwright (starts dev server automatically)
-- `npm run docs:serve` / `npm run docs:build`
+- `npm run test` / `npm run test:coverage` – Vitest (config at `config/vite.config.ts`)
+- `npm run e2e` – Playwright (config at `config/playwright.config.ts`, starts dev server automatically)
+- `npm run docs:serve` / `npm run docs:build` – MkDocs (config at `config/mkdocs.yml`)
+- `.readthedocs.yaml` + `docs/requirements.txt` enable hosting on Read the Docs with MkDocs.
 
 ## Extending the calculation engine
 `src/core/calculationEngine.ts` contains deterministic placeholder logic. Replace the marked blocks with the Bracquene et al. equations and keep the interfaces stable. Add new parameters to the typed `CalculationInput`/`CalculationResult` and surface them through the UI and docs.
