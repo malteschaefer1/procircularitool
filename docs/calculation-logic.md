@@ -1,10 +1,11 @@
-# Calculation Logic (Bracquene et al. 2020)
+# Calculation Logic (Bracquene et al. 2020 inspired)
 
-This project now implements the PCI logic from Bracquene et al. (2020), decomposed to component/material level and adjusted for a software tool. Reference: DOI:10.1016/j.resconrec.2020.104886 (see `literature/`).
+This project implements a **placeholder** PCI logic aligned with the structure of Bracquene et al. (2020), decomposed to component/material level. Reference: DOI:10.1016/j.resconrec.2020.104886 (see `literature/`). Parameter values are placeholders and must be replaced with vetted sources.
 
 ## Inputs
 - Canonical BoM (product → components → materials) with masses `M_c,m`
-- Use factors per component: `I_c`, `L_c`, reference `I_d,c`, `L_d,c`
+- Parameter inheritance: each parameter is assigned to a level (product, component, material). Values cascade downward (product → component → material) unless overridden.
+- Component-level use factors: `I_c`, `L_c`, reference `I_d,c`, `L_d,c`
 - Material parameters (fractions 0–1 unless stated): `F_u`, `F_r`, `C_u`, `C_r`, `C_cp`, `C_fp`, `E_fp`, `E_cp`, `E_ms`, `E_rfp`
 
 ## Core equations
@@ -41,10 +42,16 @@ This project now implements the PCI logic from Bracquene et al. (2020), decompos
   - `PCI_m = sum_c(M_c,m * PCI_c,m)/sum_c(M_c,m)`
 
 ## Assumptions / notes
-- Where the original specification had denominators as sums of LFI terms, this implementation uses mass-weighting (consistent with PCI mass weighting). Please validate against the publication.
-- Parameter `C_fp` is required in `W_fp` but was not listed; added with default 0.05.
-- Default parameter values are placeholders and must be replaced with vetted values from Bracquene et al. (2020) or later datasets.
+- Mass-weighting is used when aggregating LFI/PCI, in line with PCI mass weighting (the paper suggests summing LFI terms; please validate against the publication).
+- Parameter `C_fp` is required in `W_fp` but not listed in the paper; we include it with a placeholder default (0.05).
+- Default parameter values and material presets are placeholders (see `src/data/defaultParameters.ts`); replace with sourced values and add citations.
+- Parameter inheritance is enforced in code: product-level values apply everywhere unless a component overrides; component values cascade to materials unless a material overrides.
 - If any efficiency denominator is zero, the calculation falls back to 0 for that term to avoid division by zero.
 
 ## Sensitivity
-- Now perturbs component intensity `I_c`, material `F_r`, and `E_ms` by ±10%/+5% to show PCI deltas. Extend with more levers as data matures.
+- Currently perturbs component intensity `I_c`, material `F_r`, and `E_ms` by ±10%/+5% to show PCI deltas. Extend with more levers as data matures.
+
+## Defaults (placeholders)
+- Product/component-level placeholders: `I=1`, `L=1`, `I_d=1`, `L_d=1`, `C_u=0.05`, `C_r=0.6`, `F_u=0.9`, `F_r=0.2`, `C_cp=0.05`, `E_cp=0.9`, `E_fp=0.9`, `E_ms=0.9`, `E_rfp=0.9`.
+- Material presets: see `defaultMaterialParameters` for examples (steel/aluminum/copper/etc.); these should be replaced with sourced values per material family.
+- Production waste fraction is configurable elsewhere; it is not part of the PCI equations yet and is treated separately in the UI.

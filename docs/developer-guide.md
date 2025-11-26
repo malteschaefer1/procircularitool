@@ -10,6 +10,7 @@
 - PCI logic implements Bracquene et al. (2020) (DOI:10.1016/j.resconrec.2020.104886) with component/material decomposition
 - Vitest + Testing Library for unit tests; Playwright for E2E
 - MkDocs Material for docs
+- Parameter levels are assigned per input (product/component/material) with inheritance handled in the calc engine
 
 ## Project layout
 ```

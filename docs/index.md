@@ -12,6 +12,7 @@ ProCirculariTool is a browser-based tool to explore and report the Product Circu
 - Parameter inheritance: choose product/component/material level per input to avoid duplicate entry
 - PCI logic based on Bracquene et al. (2020) (DOI:10.1016/j.resconrec.2020.104886) decomposed to component/material level
 - Sensitivity analysis, charts, and PDF/CSV exports
+- Documentation served via MkDocs/Read the Docs (`mkdocs.yml`, `.readthedocs.yaml`)
 
 ## Quick start
 ```bash

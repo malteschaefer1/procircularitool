@@ -40,6 +40,6 @@ This plan captures what exists, what to add, and who each section serves so we c
 - Confirmation on analytics/privacy stance for the public docs (currently “no analytics, client-only”).
 
 ## Workflow
-- Author in `docs/`; run `mkdocs serve -f config/mkdocs.yml` locally.
+- Author in `docs/`; run `mkdocs serve -f mkdocs.yml` locally (`mkdocs.yml` inherits `config/mkdocs.yml`).
 - RTD config is in `.readthedocs.yaml` and uses `docs/requirements.txt`.
 - Keep meta/repo docs under `docs/meta/`; user-facing content stays at the top level.

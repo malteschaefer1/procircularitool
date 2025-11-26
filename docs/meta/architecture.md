@@ -27,6 +27,7 @@ src/
   store/         // Zustand store for shared state
 public/data/     // downloadable sample CSVs
 docs/meta/       // repo/process docs (architecture, status, contributing, GPT usage)
+mkdocs.yml       // root MkDocs config (inherits config/mkdocs.yml; used by Read the Docs)
 ```
 
 ## State management
@@ -39,3 +40,4 @@ docs/meta/       // repo/process docs (architecture, status, contributing, GPT u
 - Add new parameters by extending typed models in `src/core/types.ts` and propagating through store + UI.
 - Future backend can wrap calculation input/output with API calls; current engine is pure and could move server-side unchanged.
 - Analytics, auth, or persistence can be added later; current client avoids all network calls beyond asset loading.
+- Docs are served via MkDocs/Read the Docs; keep navigation in `config/mkdocs.yml` and content under `docs/`.

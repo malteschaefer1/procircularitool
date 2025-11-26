@@ -9,13 +9,14 @@
 - Parameter-level selection (product/component/material) with inheritance to reduce duplicate entry
 - Placeholder calculation engine + sensitivity (TODO: replace with Bracquene et al.)
 - Results dashboard with charts, what-if slider, exports (CSV/PNG/PDF)
-- Docs (MkDocs skeleton) and repo meta files
+- Docs: MkDocs + Read the Docs config; user/dev/meta docs organized under `docs/`
 - Tests: Vitest unit tests; Playwright E2E skeleton; GitHub Actions CI workflow
 
 ## Partially implemented
 - Parameter defaults: placeholder values only; sources pending
 - PDF report: captures current UI; dedicated template and styling TBD
 - Sensitivity: heuristic ±10% approach; needs domain-specific levers
+- Documentation depth: needs parameter reference with citations, troubleshooting, and worked examples
 
 ## Not started
 - Real PCI equations from Bracquene et al. (2020)

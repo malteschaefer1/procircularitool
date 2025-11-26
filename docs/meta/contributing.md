@@ -19,8 +19,10 @@ npm run dev
 - `npm run test` (Vitest)
 - `npm run e2e` (Playwright; starts the dev server)
 - `npm run build`
+- `npm run docs:build` (MkDocs) if you touch docs/navigation
 
 ## Pull requests
 - Describe the problem and solution clearly.
 - Note any TODOs or placeholders added.
 - Update `meta/project-status.md` (and docs) if behavior or scope changes.
+- If adding docs, keep content under `docs/` and navigation in `mkdocs.yml` / `config/mkdocs.yml`.
