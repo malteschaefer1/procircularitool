@@ -40,10 +40,10 @@ MkDocs with the Material theme lives in `docs/`. Repo/process docs sit under `do
 pip install -r docs/requirements.txt
 
 # live reload docs
-mkdocs serve -f config/mkdocs.yml
+mkdocs serve -f mkdocs.yml
 
 # static site
-mkdocs build -f config/mkdocs.yml
+mkdocs build -f mkdocs.yml
 ```
 
 ## Project layout

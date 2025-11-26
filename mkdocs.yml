@@ -1,0 +1,3 @@
+INHERIT: config/mkdocs.yml
+docs_dir: docs
+use_directory_urls: true

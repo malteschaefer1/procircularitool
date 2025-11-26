@@ -31,7 +31,7 @@ docs/meta/      // repo/process docs (architecture, project status, contributing
 - `npm run lint` / `npm run format`
 - `npm run test` / `npm run test:coverage` – Vitest (config at `config/vite.config.ts`)
 - `npm run e2e` – Playwright (config at `config/playwright.config.ts`, starts dev server automatically)
-- `npm run docs:serve` / `npm run docs:build` – MkDocs (config at `config/mkdocs.yml`)
+- `npm run docs:serve` / `npm run docs:build` – MkDocs (root `mkdocs.yml` inherits `config/mkdocs.yml`)
 - `.readthedocs.yaml` + `docs/requirements.txt` enable hosting on Read the Docs with MkDocs.
 
 ## Extending the calculation engine

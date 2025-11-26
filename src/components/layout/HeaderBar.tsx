@@ -1,4 +1,4 @@
-import { Anchor, Group, SegmentedControl, Text, Title, Tooltip } from '@mantine/core';
+import { Anchor, Avatar, Group, SegmentedControl, Text, Title, Tooltip } from '@mantine/core';
 import { IconContrast, IconMoonStars, IconSun } from '@tabler/icons-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useThemeMode } from '../../theme/ThemeProvider';
@@ -14,34 +14,43 @@ const HeaderBar = ({ onReset }: HeaderBarProps) => {
 
   return (
     <Group justify="space-between" align="center">
-      <div>
-        <Title order={2}>{t('app.title')}</Title>
-        <Text size="sm" c="dimmed">
-          <Trans
-            i18nKey="app.tagline"
-            components={{
-              0: (
-                <Anchor
-                  href="https://doi.org/10.1016/j.resconrec.2019.104608"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              ),
-            }}
-          />
-        </Text>
-        <Text size="sm">
-          <Trans
-            i18nKey="app.contact"
-            components={{
-              0: <Anchor href="mailto:mschaefer@uni-wuppertal.de" />,
-            }}
-          />
-        </Text>
-        <Text size="xs" c="blue" onClick={onReset} style={{ cursor: 'pointer' }}>
-          {t('app.reset')}
-        </Text>
-      </div>
+      <Group align="flex-start" gap="sm">
+        <Avatar
+          src="/icon1024.png"
+          alt="ProCirculariTool icon"
+          size={56}
+          radius="md"
+          style={{ borderRadius: 12 }}
+        />
+        <div>
+          <Title order={2}>{t('app.title')}</Title>
+          <Text size="sm" c="dimmed">
+            <Trans
+              i18nKey="app.tagline"
+              components={{
+                0: (
+                  <Anchor
+                    href="https://doi.org/10.1016/j.resconrec.2019.104608"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                ),
+              }}
+            />
+          </Text>
+          <Text size="sm">
+            <Trans
+              i18nKey="app.contact"
+              components={{
+                0: <Anchor href="mailto:mschaefer@uni-wuppertal.de" />,
+              }}
+            />
+          </Text>
+          <Text size="xs" c="blue" onClick={onReset} style={{ cursor: 'pointer' }}>
+            {t('app.reset')}
+          </Text>
+        </div>
+      </Group>
       <Group gap="sm" wrap="nowrap">
         <Tooltip label={t('nav.theme')}>
           <SegmentedControl

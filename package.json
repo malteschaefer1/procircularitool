@@ -17,8 +17,8 @@
     "e2e:headed": "playwright test --headed --config config/playwright.config.ts",
     "check": "npm run lint && npm run test && npm run build",
     "typecheck": "tsc --noEmit",
-    "docs:serve": "mkdocs serve -f config/mkdocs.yml",
-    "docs:build": "mkdocs build -f config/mkdocs.yml"
+    "docs:serve": "mkdocs serve -f mkdocs.yml",
+    "docs:build": "mkdocs build -f mkdocs.yml"
   },
   "repository": {
     "type": "git",
