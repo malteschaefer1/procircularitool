@@ -1,10 +1,3 @@
 component_id,component_name,component_mass_kg,component_quantity,material_type,material_mass_per_component_kg
-drum-assembly,Drum assembly,28,1,Stainless steel,20
-drum-assembly,Drum assembly,28,1,Carbon steel counterweight,8
-cabinet,Cabinet,15,1,Carbon steel,11.5
-cabinet,Cabinet,15,1,PP polymer,3.5
-electronics-module,Electronics module,4,1,Electronics,1.6
-electronics-module,Electronics module,4,1,Copper wiring,0.7
-electronics-module,Electronics module,4,1,ABS plastic,1.7
-water-handling,Water handling,6,1,Rubber hoses,4
-water-handling,Water handling,6,1,Stainless steel fasteners,2
+1,housing,22.84,1,Mild steel,16.15
+2,housing,22.84,1,Polypropylene,8.51

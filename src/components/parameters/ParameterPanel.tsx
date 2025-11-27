@@ -45,6 +45,7 @@ const ParameterPanel = ({ onCalculated }: ParameterPanelProps) => {
       { key: 'cu', label: t('parameters.labels.cu'), levels: ['product', 'component', 'material'] },
       { key: 'cr', label: t('parameters.labels.cr'), levels: ['product', 'component', 'material'] },
       { key: 'ccp', label: t('parameters.labels.ccp'), levels: ['product', 'component', 'material'] },
+      { key: 'cfp', label: t('parameters.labels.cfp'), levels: ['product', 'component', 'material'] },
       { key: 'e_cp', label: t('parameters.labels.ecp'), levels: ['product', 'component', 'material'] },
       { key: 'fu', label: t('parameters.labels.fu'), levels: ['product', 'component', 'material'] },
       { key: 'fr', label: t('parameters.labels.fr'), levels: ['product', 'component', 'material'] },
@@ -160,9 +161,9 @@ const ParameterPanel = ({ onCalculated }: ParameterPanelProps) => {
     0;
 
   type MaterialParamKey = keyof NonNullable<typeof product.components[number]['materials'][number]['materialParameters']>;
-  const materialParamKeys: MaterialParamKey[] = ['fu', 'fr', 'cu', 'cr', 'ccp', 'e_fp', 'e_cp', 'e_ms', 'e_rfp'];
+  const materialParamKeys: MaterialParamKey[] = ['fu', 'fr', 'cu', 'cr', 'ccp', 'cfp', 'e_fp', 'e_cp', 'e_ms', 'e_rfp'];
 
-  const fractionKeys: ParameterKey[] = ['cu', 'cr', 'fu', 'fr', 'ccp', 'e_cp', 'e_fp', 'e_ms', 'e_rfp'];
+  const fractionKeys: ParameterKey[] = ['cu', 'cr', 'fu', 'fr', 'ccp', 'cfp', 'e_cp', 'e_fp', 'e_ms', 'e_rfp'];
   const maxFor = (key: ParameterKey) => (fractionKeys.includes(key) ? 1 : undefined);
 
   return (

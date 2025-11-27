@@ -1,8 +1,12 @@
 component_id,component_name,component_mass_kg,component_quantity,material_type,material_mass_per_component_kg
-housing,Housing,0.42,1,Aluminum,0.3
-housing,Housing,0.42,1,Zinc,0.12
-actuator,Actuator,0.3,1,Brass,0.18
-actuator,Actuator,0.3,1,Steel spring,0.12
-electronics,Electronics,0.14,1,Electronics,0.08
-electronics,Electronics,0.14,1,Copper wiring,0.06
-mounting-set,Mounting set,0.2,1,Stainless steel fasteners,0.2
+1,Case,0.21,1,Polyamide,0.16
+1,Case,0.21,1,Stainless steel,0.05
+2,Locking mechanism,0.053,1,Polyamide,0.012
+2,Locking mechanism,0.053,1,Stainless steel,0.006
+2,Locking mechanism,0.053,1,Brass,0.01
+2,Locking mechanism,0.053,1,Aluminum,0.025
+3,Magnet,0.068,1,Copper,0.025
+3,Magnet,0.068,1,Stainless steel,0.03
+3,Magnet,0.068,1,Iron,0.013
+4,Printed circuit board,0.02,1,Mixed,0.02
+5,Packaging,0.05,1,Cardboard,0.05

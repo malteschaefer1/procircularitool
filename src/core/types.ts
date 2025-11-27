@@ -13,6 +13,7 @@ export interface ProductParameters {
   fu?: number;
   fr?: number;
   ccp?: number;
+  cfp?: number;
   e_cp?: number;
   e_fp?: number;
   e_ms?: number;
@@ -31,6 +32,7 @@ export interface ComponentParameters {
   fu?: number;
   fr?: number;
   ccp?: number;
+  cfp?: number;
   e_cp?: number;
   e_fp?: number;
   e_ms?: number;
@@ -147,6 +149,7 @@ export type ParameterKey =
   | 'fu'
   | 'fr'
   | 'ccp'
+  | 'cfp'
   | 'e_cp'
   | 'e_fp'
   | 'e_ms'

@@ -81,7 +81,7 @@ export const calculatePci = (input: CalculationInput): CalculationResult => {
       const cu = resolveParam('cu', input, componentIndex, materialIndex);
       const cr = resolveParam('cr', input, componentIndex, materialIndex);
       const ccp = resolveParam('ccp', input, componentIndex, materialIndex);
-      const cfp = material.materialParameters?.cfp ?? 0;
+      const cfp = resolveParam('cfp', input, componentIndex, materialIndex);
       const e_fp = resolveParam('e_fp', input, componentIndex, materialIndex);
       const e_cp = resolveParam('e_cp', input, componentIndex, materialIndex);
       const e_ms = resolveParam('e_ms', input, componentIndex, materialIndex);
@@ -168,7 +168,7 @@ export const calculatePci = (input: CalculationInput): CalculationResult => {
       const cu = resolveParam('cu', input, componentIndex, materialIndex);
       const cr = resolveParam('cr', input, componentIndex, materialIndex);
       const ccp = resolveParam('ccp', input, componentIndex, materialIndex);
-      const cfp = material.materialParameters?.cfp ?? 0;
+      const cfp = resolveParam('cfp', input, componentIndex, materialIndex);
       const e_fp = resolveParam('e_fp', input, componentIndex, materialIndex);
       const e_cp = resolveParam('e_cp', input, componentIndex, materialIndex);
       const e_ms = resolveParam('e_ms', input, componentIndex, materialIndex);
