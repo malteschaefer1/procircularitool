@@ -18,6 +18,7 @@ import { CalculationResult } from '../../core/types';
 import { formatMass } from '../../core/units';
 import BarChartCard from './BarChartCard';
 import GaugeChart from './GaugeChart';
+import LinearIndicator from './LinearIndicator';
 
 interface ResultsViewProps {
   result: CalculationResult | null;
@@ -51,46 +52,67 @@ const ResultsView = ({ result, containerRef }: ResultsViewProps) => {
   const recycledShare = Math.max(0, Math.min(100, 100 - virginShare - wasteShare));
   const virginMass = result.totalVirginMassKg || 0;
   const wasteMass = result.totalWasteMassKg || 0;
+  const lfiValue = Math.min(Math.max(result.lfiOverall, 0), 1);
 
   return (
     <Stack gap="md" ref={containerRef}>
       <Title order={4}>{t('results.title')}</Title>
-      <Grid>
-        <Grid.Col span={{ base: 12, md: 4 }}>
-          <GaugeChart value={result.pciOverall} label={t('results.overallPci')} />
+      <Grid align="stretch">
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <GaugeChart
+            value={result.pciOverall}
+            label={t('results.overallPci')}
+            description={t('results.pciDescription')}
+          />
         </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 8 }}>
-          <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="sm">
-            <Card withBorder>
-              <Text size="sm" c="dimmed">
-                {t('results.totalMass')}
-              </Text>
-              <Text fw={700}>{formatMass(result.totalProductMassKg)}</Text>
-            </Card>
-            <Card withBorder>
-              <Text size="sm" c="dimmed">
-                {t('results.totalWaste')}
-              </Text>
-              <Text fw={700}>{formatMass(wasteMass)}</Text>
-            </Card>
-            <Card withBorder>
-              <Text size="sm" c="dimmed">
-                {t('results.totalVirgin')}
-              </Text>
-              <Text fw={700}>{formatMass(virginMass)}</Text>
-            </Card>
-          </SimpleGrid>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <LinearIndicator
+            value={lfiValue}
+            reverse
+            label={t('results.lfi')}
+            description={t('results.lfiDescription')}
+          />
         </Grid.Col>
       </Grid>
 
       <Grid>
         <Grid.Col span={{ base: 12, md: 6 }}>
-          <BarChartCard title={t('results.componentPci')} data={componentChartData} />
+          <BarChartCard
+            title={t('results.componentPci')}
+            data={componentChartData}
+            referenceValue={result.pciOverall}
+          />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
-          <BarChartCard title={t('results.materialPci')} data={materialChartData} color="#12b886" />
+          <BarChartCard
+            title={t('results.materialPci')}
+            data={materialChartData}
+            color="#12b886"
+            referenceValue={result.pciOverall}
+          />
         </Grid.Col>
       </Grid>
+
+      <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="sm">
+        <Card withBorder>
+          <Text size="sm" c="dimmed">
+            {t('results.totalMass')}
+          </Text>
+          <Text fw={700}>{formatMass(result.totalProductMassKg)}</Text>
+        </Card>
+        <Card withBorder>
+          <Text size="sm" c="dimmed">
+            {t('results.totalWaste')}
+          </Text>
+          <Text fw={700}>{formatMass(wasteMass)}</Text>
+        </Card>
+        <Card withBorder>
+          <Text size="sm" c="dimmed">
+            {t('results.totalVirgin')}
+          </Text>
+          <Text fw={700}>{formatMass(virginMass)}</Text>
+        </Card>
+      </SimpleGrid>
 
       <Card withBorder shadow="sm">
         <Title order={5}>{t('results.flowPlaceholder')}</Title>
@@ -111,7 +133,6 @@ const ResultsView = ({ result, containerRef }: ResultsViewProps) => {
           {t('results.flowTodo')}
         </Text>
       </Card>
-
       <Card withBorder shadow="sm">
         <Title order={5}>{t('results.lfi')}</Title>
         <SimpleGrid cols={{ base: 1, md: 3 }} spacing="sm">

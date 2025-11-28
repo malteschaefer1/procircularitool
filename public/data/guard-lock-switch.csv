@@ -8,5 +8,5 @@ component_id,component_name,component_mass_kg,component_quantity,material_type,m
 3,Magnet,0.068,1,Copper,0.025
 3,Magnet,0.068,1,Stainless steel,0.03
 3,Magnet,0.068,1,Iron,0.013
-4,Printed circuit board,0.02,1,Mixed,0.02
+4,Printed circuit board,0.02,1,PCB,0.02
 5,Packaging,0.05,1,Cardboard,0.05

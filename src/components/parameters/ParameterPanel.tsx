@@ -1,6 +1,7 @@
 import {
   ActionIcon,
   Alert,
+  Box,
   Button,
   Card,
   Group,
@@ -144,6 +145,10 @@ const ParameterPanel = ({ onCalculated }: ParameterPanelProps) => {
   const paramsByLevel = (level: ParameterLevel) =>
     parameterDefs.filter((param) => getLevelForParam(param.key) === level);
 
+  const productLevelParams = paramsByLevel('product');
+  const componentLevelParams = paramsByLevel('component');
+  const materialLevelParams = paramsByLevel('material');
+
   const renderLabel = (label: string) => (
     <Group gap={4} wrap="nowrap" align="center">
       <Text size="xs">{label}</Text>
@@ -188,127 +193,168 @@ const ParameterPanel = ({ onCalculated }: ParameterPanelProps) => {
           </List>
         </Alert>
       )}
+
       <Card withBorder shadow="sm">
-        <Title order={4}>{t('parameters.title')}</Title>
-        <Text size="sm" c="dimmed" mb="sm">
-          {t('parameters.subtitle')}
-        </Text>
-        <Text size="sm" fw={600} mb="xs">
-          {t('parameters.levelSelectionTitle')}
-        </Text>
-        <Text size="xs" c="dimmed" mb="sm">
-          {t('parameters.levelSelectionHint')}
-        </Text>
-        <Stack gap="xs">
-          {parameterDefs.map((param) => (
-            <Group key={param.key} justify="space-between" align="center">
-              <Text size="sm" fw={600}>
-                {param.label}
-              </Text>
-              <Select
-                data={levelOptions.filter((option) => param.levels.includes(option.value as ParameterLevel))}
-                value={getLevelForParam(param.key)}
-                onChange={(value) =>
-                  value &&
-                  setParameterLevels({
-                    ...parameterLevels,
-                    [param.key]: value as ParameterLevel,
-                  })
-                }
-                maw={200}
-              />
-            </Group>
-          ))}
-        </Stack>
-      </Card>
+        <Card.Section withBorder inheritPadding py="md">
+          <Title order={4}>{t('parameters.title')}</Title>
+          <Text size="sm" c="dimmed" mb="sm">
+            {t('parameters.subtitle')}
+          </Text>
+          <Text size="sm" fw={600} mb="xs">
+            {t('parameters.levelSelectionTitle')}
+          </Text>
+          <Text size="xs" c="dimmed" mb="sm">
+            {t('parameters.levelSelectionHint')}
+          </Text>
+          <Stack gap={4}>
+            {parameterDefs.map((param, index) => {
+              const rowBg = index % 2 === 0 ? 'white' : 'gray.0';
+              return (
+                <Box
+                  key={param.key}
+                  bg={rowBg}
+                  p="xs"
+                  style={{ borderRadius: 8 }}
+                >
+                  <Group justify="space-between" align="center">
+                    <Text size="sm" fw={600}>
+                      {param.label}
+                    </Text>
+                    <Select
+                      data={levelOptions.filter((option) => param.levels.includes(option.value as ParameterLevel))}
+                      value={getLevelForParam(param.key)}
+                      onChange={(value) =>
+                        value &&
+                        setParameterLevels({
+                          ...parameterLevels,
+                          [param.key]: value as ParameterLevel,
+                        })
+                      }
+                      maw={200}
+                    />
+                  </Group>
+                </Box>
+              );
+            })}
+          </Stack>
+        </Card.Section>
 
-      {paramsByLevel('product').length > 0 && (
-        <Card withBorder shadow="sm">
-          <Group justify="space-between" align="center" mb="xs">
-            <Title order={5}>{t('parameters.levels.product')}</Title>
-            <Text size="xs" c="dimmed">
-              {t('parameters.inheritanceHint')}
-            </Text>
-          </Group>
-          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xs">
-            {paramsByLevel('product').map((param) => (
-              <NumberInput
-                key={`product-${param.key}`}
-                label={renderLabel(param.label)}
-                min={0}
-                max={maxFor(param.key)}
-                step={0.05}
-                value={getProductValue(param.key)}
-                onChange={(value) => updateProductParam(param.key, Number(value ?? 0))}
-              />
-            ))}
-          </SimpleGrid>
-        </Card>
-      )}
-
-      {product.components.map((component) => (
-        <Card key={component.componentId} withBorder shadow="sm">
-          <Group justify="space-between" mb="xs">
+        <Card.Section inheritPadding py="md">
+          <Stack gap="xs">
             <div>
-              <Title order={5}>{component.componentName}</Title>
+              <Title order={5}>{t('parameters.levels.product')}</Title>
               <Text size="xs" c="dimmed">
-                {t('parameters.componentUseFactors')}
+                {productLevelParams.length > 0
+                  ? t('parameters.inheritanceHint')
+                  : t('parameters.noProductParams')}
               </Text>
             </div>
-            <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xs">
-              {paramsByLevel('component').map((param) => (
-                <NumberInput
-                  key={`component-${component.componentId}-${param.key}`}
-                  label={renderLabel(param.label)}
-                  min={0}
-                  max={maxFor(param.key)}
-                  step={0.05}
-                  value={(component.componentParameters as Record<string, number | undefined>)?.[param.key] ?? getProductValue(param.key)}
-                  onChange={(value) => updateComponentParam(component.componentId, param.key, Number(value ?? 0))}
-                />
-              ))}
-            </SimpleGrid>
-          </Group>
-          <Stack gap="sm" mt="sm">
-            {component.materials.map((material) => (
-              <Card key={material.materialId} withBorder shadow="xs" radius="md">
-                <Title order={6}>{material.materialName}</Title>
-                <Text size="xs" c="dimmed" mb="xs">
-                  {t('parameters.materialRowHelper')}
-                </Text>
-                <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xs">
-                  {paramsByLevel('material')
-                    .filter((param) => materialParamKeys.includes(param.key as MaterialParamKey))
-                    .map((param) => (
-                    <NumberInput
-                      key={`material-${material.materialId}-${param.key}`}
-                      label={renderLabel(param.label)}
-                      min={0}
-                      max={maxFor(param.key)}
-                      step={0.05}
-                      value={(material.materialParameters as Record<string, number | undefined>)?.[param.key] ?? (component.componentParameters as Record<string, number | undefined>)?.[param.key] ?? getProductValue(param.key)}
-                      onChange={(value) =>
-                        updateMaterialParam(
-                          component.componentId,
-                          material.materialId,
-                          param.key as MaterialParamKey,
-                          Number(value ?? 0),
-                        )
-                      }
-                    />
+            {productLevelParams.length > 0 && (
+              <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xs">
+                {productLevelParams.map((param) => (
+                  <NumberInput
+                    key={`product-${param.key}`}
+                    label={renderLabel(param.label)}
+                    min={0}
+                    max={maxFor(param.key)}
+                    step={0.05}
+                    value={getProductValue(param.key)}
+                    onChange={(value) => updateProductParam(param.key, Number(value ?? 0))}
+                  />
+                ))}
+              </SimpleGrid>
+            )}
+          </Stack>
+        </Card.Section>
+
+        <Card.Section inheritPadding py="md">
+          <Stack gap="sm">
+            {product.components.map((component) => (
+              <Card key={component.componentId} withBorder shadow="xs" radius="md">
+                <Group justify="space-between" mb="xs">
+                  <div>
+                    <Title order={5}>{component.componentName}</Title>
+                    <Text size="xs" c="dimmed">
+                      {componentLevelParams.length > 0
+                        ? t('parameters.componentUseFactors')
+                        : t('parameters.noComponentParams')}
+                    </Text>
+                  </div>
+                  {componentLevelParams.length > 0 && (
+                    <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xs">
+                      {componentLevelParams.map((param) => (
+                        <NumberInput
+                          key={`component-${component.componentId}-${param.key}`}
+                          label={renderLabel(param.label)}
+                          min={0}
+                          max={maxFor(param.key)}
+                          step={0.05}
+                          value={(component.componentParameters as Record<string, number | undefined>)?.[param.key] ?? getProductValue(param.key)}
+                          onChange={(value) => updateComponentParam(component.componentId, param.key, Number(value ?? 0))}
+                        />
+                      ))}
+                    </SimpleGrid>
+                  )}
+                </Group>
+                <Stack gap="sm" mt="sm">
+                  {component.materials.map((material) => (
+                    <Card key={material.materialId} withBorder shadow="xs" radius="md">
+                      {/*
+                        Use the filtered list once per material to avoid repeated filtering and to simplify empty-state handling.
+                      */}
+                      {(() => {
+                        const materialParams = materialLevelParams.filter((param) =>
+                          materialParamKeys.includes(param.key as MaterialParamKey),
+                        );
+                        return (
+                          <>
+                            <Title order={6}>{material.materialName}</Title>
+                            <Text size="xs" c="dimmed" mb="xs">
+                              {materialParams.length > 0
+                                ? t('parameters.materialRowHelper')
+                                : t('parameters.noMaterialParams')}
+                            </Text>
+                            {materialParams.length > 0 && (
+                              <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xs">
+                                {materialParams.map((param) => (
+                                  <NumberInput
+                                    key={`material-${material.materialId}-${param.key}`}
+                                    label={renderLabel(param.label)}
+                                    min={0}
+                                    max={maxFor(param.key)}
+                                    step={0.05}
+                                    value={(material.materialParameters as Record<string, number | undefined>)?.[param.key] ?? (component.componentParameters as Record<string, number | undefined>)?.[param.key] ?? getProductValue(param.key)}
+                                    onChange={(value) =>
+                                      updateMaterialParam(
+                                        component.componentId,
+                                        material.materialId,
+                                        param.key as MaterialParamKey,
+                                        Number(value ?? 0),
+                                      )
+                                    }
+                                  />
+                                ))}
+                              </SimpleGrid>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </Card>
                   ))}
-                </SimpleGrid>
+                </Stack>
               </Card>
             ))}
           </Stack>
-        </Card>
-      ))}
+        </Card.Section>
 
-      <Group justify="flex-end">
-        <Button onClick={calculate} data-testid="calculate-pci">
-          {t('actions.calculate')}
-        </Button>
-      </Group>
+        <Card.Section inheritPadding py="md">
+          <Group justify="flex-end">
+            <Button onClick={calculate} data-testid="calculate-pci">
+              {t('actions.calculate')}
+            </Button>
+          </Group>
+        </Card.Section>
+      </Card>
     </Stack>
   );
 };

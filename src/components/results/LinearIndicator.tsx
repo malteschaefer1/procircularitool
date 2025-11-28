@@ -1,5 +1,4 @@
-import { Card, Text } from '@mantine/core';
-import { PolarAngleAxis, RadialBar, RadialBarChart } from 'recharts';
+import { Card, Group, Progress, Text } from '@mantine/core';
 
 const gradientColor = (value: number, reverse = false) => {
   const stops = [
@@ -25,51 +24,38 @@ const gradientColor = (value: number, reverse = false) => {
   const lerp = (a: number, b: number) => Math.round(a + (b - a) * ratio);
   const lc = lower.color.match(/[0-9a-f]{2}/gi)?.map((c) => parseInt(c, 16)) ?? [0, 0, 0];
   const uc = upper.color.match(/[0-9a-f]{2}/gi)?.map((c) => parseInt(c, 16)) ?? [0, 0, 0];
-  const [r, g, b] = [lerp(lc[0], uc[0]), lerp(lc[1], uc[1]), lerp(lc[2], uc[2])];
+  const [r, g, b] = [lerp(lc[0], uc[0]), lerp(lc[1], uc[1]) , lerp(lc[2], uc[2])];
   return `rgb(${r}, ${g}, ${b})`;
 };
 
-interface GaugeChartProps {
+interface LinearIndicatorProps {
   value: number;
   label: string;
   description?: string;
+  reverse?: boolean;
 }
 
-const GaugeChart = ({ value, label, description }: GaugeChartProps) => {
-  const percent = Math.min(Math.max(value * 100, 0), 100);
-  const color = gradientColor(percent, false);
-  const data = [{ name: label, value: percent, fill: color }];
+const LinearIndicator = ({ value, label, description, reverse = false }: LinearIndicatorProps) => {
+  const pct = Math.min(Math.max(value * 100, 0), 100);
+  const color = gradientColor(pct, reverse);
 
   return (
     <Card withBorder shadow="sm" radius="md" p="sm" style={{ height: '100%' }}>
       <Text size="sm" fw={600} mb="xs">
         {label}
       </Text>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '8px 0' }}>
-        <RadialBarChart
-          width={260}
-          height={260}
-          cx={130}
-          cy={130}
-          innerRadius={80}
-          outerRadius={110}
-          barSize={22}
-          data={data}
-          startAngle={90}
-          endAngle={-270}
-        >
-          <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-          <RadialBar
-            dataKey="value"
-            cornerRadius={999}
-            background={{ fill: '#edf0f2' }}
-          />
-          <circle cx={130} cy={130} r={72} fill="white" />
-          <text x={130} y={130} textAnchor="middle" dominantBaseline="middle" fontSize={28} fontWeight={700}>
-            {percent.toFixed(1)}%
-          </text>
-        </RadialBarChart>
-      </div>
+      <Group align="center" mb="xs" gap="sm">
+        <Progress
+          value={pct}
+          size="xl"
+          radius="xl"
+          w="100%"
+          color={color}
+        />
+        <Text fw={700} size="md" miw={56} ta="right" style={{ color }}>
+          {pct.toFixed(1)}%
+        </Text>
+      </Group>
       {description && (
         <Text size="xs" c="dimmed">
           {description}
@@ -79,4 +65,4 @@ const GaugeChart = ({ value, label, description }: GaugeChartProps) => {
   );
 };
 
-export default GaugeChart;
+export default LinearIndicator;

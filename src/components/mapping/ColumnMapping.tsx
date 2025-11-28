@@ -16,6 +16,7 @@ import { IconAlertTriangle, IconInfoCircle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { guessMappingFromColumns, mapRowsToProduct, MASS_TOLERANCE, validateComponentMassBalance } from '../../core/bomMapping';
 import { ColumnMapping, MassBalanceIssue } from '../../core/types';
+import { applyGuardLockSwitchPresets } from '../../data/guardLockSwitchPresets';
 import { useAppStore } from '../../store/useAppStore';
 
 interface ColumnMappingProps {
@@ -33,6 +34,7 @@ const ColumnMappingStep = ({ onProceed }: ColumnMappingProps) => {
     productName,
     setProductName,
     setMassBalanceWarnings,
+    setParameterLevels,
   } = useAppStore();
   const columns = useMemo(() => (rawRows.length > 0 ? Object.keys(rawRows[0]) : []), [rawRows]);
   const guessedMapping = useMemo(
@@ -74,7 +76,10 @@ const ColumnMappingStep = ({ onProceed }: ColumnMappingProps) => {
   const applyMapping = () => {
     if (!activeMapping) return;
     const effectiveName = productName.trim() || 'Custom product';
-    const product = mapRowsToProduct(rawRows, activeMapping, effectiveName);
+    let product = mapRowsToProduct(rawRows, activeMapping, effectiveName);
+    const { product: presetProduct, parameterLevels } = applyGuardLockSwitchPresets(product, effectiveName);
+    product = presetProduct;
+    if (parameterLevels) setParameterLevels(parameterLevels);
     setCalculationResult(null);
     const { errors, warnings } = validateComponentMassBalance(product.components);
 
